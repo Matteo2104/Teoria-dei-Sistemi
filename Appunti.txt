@@ -1,0 +1,1907 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{geometry}
+\geometry{a4paper, top=2cm, bottom=2cm, left=2cm, right=2cm, heightrounded, bindingoffset=5mm}
+
+\title{Teoria Dei Sistemi}
+\author{Matteo Scarcella}
+\date{Marzo 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Raggiungibilità e Controllabilità a tempo discreto}
+\subsection*{Definizione 5.1.1}
+Uno stato $x$ di un sistema si dice raggiungibile se esiste un controllo $u$ e un istante finito $t > 0$ tale che partendo dallo stato iniziale $x(0) = 0$ il controllo porti il sistema nello stato $x$, e si scrive
+\begin{equation}
+    \varphi (t, 0, u) = x
+\end{equation}
+Un sistema è raggiungibile se tutti i suoi stati lo sono.
+\subsection*{Definizione 5.1.2}
+Uno stato $x$ è detto controllabile se esiste un controllo $u$ e un istante finito $t > 0$ tale che partendo da $x$ il controllo porti il sistema nello stato $x(t) = 0$, e si scrive
+\begin{equation}
+    \varphi (t, x, u) = 0
+\end{equation}
+Un sistema è controllabile se tutti i suoi stati lo sono.
+\subsection*{Proprietà 5.1.1}
+Se uno stato $x$ è raggiungibile, allora lo è anche qualunque altro stato $\overline{x}$ al quale il sistema può arrivare in evoluzione libera a partire dallo stato $x$, cioè
+\begin{equation}
+    \overline{x} = \varphi (t, x, 0)
+\end{equation}
+\subsection*{Proprietà 5.1.2}
+Se uno stato $x$ è controllabile, allora lo è anche qualunque altro stato $\overline{x}$ dal quale il sistema può arrivare in evoluzione libera allo stato $x$, cioè
+\begin{equation}
+    x = \varphi (t, \overline{x}, 0)
+\end{equation}
+\subsection*{Proprietà 5.1.3}
+L'insieme degli stati raggiungibili $X_r$ è un sottospazio di $R^n$
+\subsection*{Proprietà 5.1.4}
+L'insieme degli stati controllabili $X_c$ è un sottospazio di $R^n$
+\newpage
+\subsection*{Teorema 5.2.1} 
+    \subsubsection*{Premessa}
+    Per lo studio della raggiungibilità e controllabilità a tempo discreto si introduce una matrice $P$ detta matrice di raggiungibilità
+    \begin{equation}
+        P =
+        \begin{bmatrix}
+            B & AB & ... & A^{n-2}B & A^{n-1}B
+        \end{bmatrix}
+    \end{equation}
+    Inoltre, si fa riferimento ad uno stato $x$ raggiungibile con la seguente espressione
+    \begin{equation}
+        x = \sum_{h=0}^{k-1}A^{k-1-h}Bu(h)
+    \end{equation}
+    \subsubsection*{Enunciato} 
+    a) L'insieme degli stati raggiungibili coincide con l'immagine della matrice P di raggiungibilità
+    \begin{equation}
+        X_r = Im(P)
+    \end{equation}
+    b) Un sistema è raggiungibile se e solo se il rango della matrice P di raggiungibilità è pari alla dimensione dello spazio di stato $n$
+    \begin{equation}
+        Sistema \,\, raggiungibile \iff rank(P) = n
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    a) $x \in X_r \Rightarrow x \in Im(P)$. Poichè $x$ è raggiungibile, allora si può dire, per definizione di raggiungibilità, per un certo $k \le n$
+    \begin{equation}
+        x = \sum_{h=0}^{k-1}A^{k-1-h}Bu(h)
+    \end{equation}
+    Questa relazione può essere riscritta in forma matriciale come
+    \begin{equation}
+        \begin{bmatrix}
+            A^{k-1}B & A^{k-2}B & ... & AB & B
+        \end{bmatrix}
+        \begin{bmatrix}
+           u(0)\\
+           u(1)\\
+           ...\\
+           u(k-2)\\
+           u(k-1)
+        \end{bmatrix}
+        = x
+    \end{equation}
+    Quindi, poichè 
+    \begin{itemize}
+        \item la matrice a sinistra risulta essere una porzione della matrice P di raggiungibilità
+        \item l'esistenza della $u$ è provata dal fatto che per ipotesi $x$ è raggiungibile
+    \end{itemize}
+    allora tale scrittura implica proprio che $x$ sta dentro l'immagine di $P$, perchè è una delle soluzioni del sistema. Per $k > n$ si può usare il teorema di Caley-Hamilton per scrivere
+    \begin{equation}
+        A^nBu(k-n-1) = - \sum_{i=0}^{n-1}a_iA^iBu(k-n-1)
+    \end{equation}
+    Per $k = n$. Ma è vero anche che
+    \begin{equation}
+        A^{n+j}Bu(k-n-1) = - \sum_{i=0}^{n-1}a_iA^{i+j}Bu(k-n-1-j)
+    \end{equation}
+    Che poichè è valida per ogni $j > 0$, iterando più volte mostra che tale scrittura è valida per ogni $k > n$. Riscrivendo quindi il membro a destra in forma matriciale e raggruppando in $\overline{u}$ anche i coefficienti $-a_i$ si ottiene
+    \begin{equation}
+        \begin{bmatrix}
+            B & AB & ... & A^{n-2}B & A^{n-1}B
+        \end{bmatrix}
+        \begin{bmatrix}
+           \overline{u}_{n-1}\\
+           \overline{u}_{n-2}\\
+           ...\\
+           \overline{u}_{1}\\
+           \overline{u}_{0}\\
+        \end{bmatrix}
+        = x
+    \end{equation}
+    Che, come prima, mostra che $x \in Im(P)$.\\ \\
+    $x \in X_r \Leftarrow x \in Im(P)$. Se $x$ appartiene all'immagine di $P$, allora vuol dire che $x$ è una soluzione del sistema
+    \begin{equation}
+        \begin{bmatrix}
+            B & AB & ... & A^{k-2}B & A^{k-1}B
+        \end{bmatrix}
+        \begin{bmatrix}
+           u_{k-1}\\
+           u_{k-2}\\
+           ...\\
+           u_{1}\\
+           u_{0}\\
+        \end{bmatrix}
+        = x
+    \end{equation}
+    Che riscrivendo in forma compatta diventa
+    \begin{equation}
+        \sum_{h=0}^{k-1}A^{k-1-h}Bu(h) = x
+    \end{equation}
+    Che è esattamente la definizione di raggiungibilità per uno stato $x$ per un certo valore di $k$.\\ \\
+    b) Per definizione, uno sistema è raggiungibile se e solo se lo sono tutti i suoi stati. Il che equivale a dire che il sottospazio degli stati raggiungibili $X_r$ deve avere dimensione pari allo spazio di stato, cioè $dim(X_r) = n$. Ma poichè si è appena dimostrato che se un sistema è raggiungibile allora $X_r = Im(P)$, ciò equivale a dire che il rango della matrice $P$ di raggiungibilità dev'essere pari ad $n$. \\ \\
+
+\newpage
+\subsection*{Lemma 5.3.1}
+    \subsubsection*{Premessa}
+    Per lo studio della controllabilità a tempo discreto si farà riferimento ad uno stato $x$ controllabile usando la seguente espressione
+    \begin{equation}
+        A^kx + \sum_{h=0}^{k-1}A^{k-1-h}Bu(h) = 0
+    \end{equation}
+    \subsubsection*{Enunciato}
+    Per ogni stato controllabile $x$ del sistema esiste un funzione d'ingresso $u$ tale che, per $k = n$
+    \begin{equation}
+        A^kx + \sum_{h=0}^{k-1}A^{k-1-h}Bu(h) = 0
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+
+\newpage
+\subsection*{Teorema 5.3.1}
+    \subsubsection*{Enunciato}
+    a) L'insieme degli stati controllabili $X_c$ è composto da tutti gli stati $x$ che soddisfano la relazione
+    \begin{equation}
+        A^nx \in Im(P)
+    \end{equation}
+    b) Il sistema è controllabile se e solo se
+    \begin{equation}
+        Im(A^n) \subset Im(P)
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    a) Per il lemma 5.3.1, uno stato $x$ è controllabile se e solo se soddisfa la
+    \begin{equation}
+        A^kx + \sum_{h=0}^{k-1}A^{k-1-h}Bu(h) = 0
+    \end{equation}
+    per $k = n$. Quindi, mettendosi nel caso $k = n$, spostando il termine con la sommatoria a destra e riscrivendo la relazione in forma matriciale si ottiene
+    \begin{equation}
+        A^nx = 
+        \begin{bmatrix}
+            B & AB & ... & A^{k-2}B & A^{k-1}B
+        \end{bmatrix}
+        \begin{bmatrix}
+           -u_{n-1}\\
+           -u_{n-2}\\
+           ...\\
+           -u_{1}\\
+           -u_{0}\\
+        \end{bmatrix}
+    \end{equation}
+    Dove l'esistenza del vettore $u$ implica proprio che $A^nx$ sta dentro l'immagine di $P$.\\ \\
+    b) Se il sistema è controllabile allora tutti i suoi stati lo sono. Quindi qualunque vettore $x$ moltiplicato per $A^n$ sta dentro l'immagine di $P$, cioè
+    \begin{equation}
+        A^nx \in Im(P) \quad \forall x \in R^n
+    \end{equation}
+    Cioè l'immagine di $A^n$ è un sottoinsieme dell'immagine di $P$.
+\subsection*{Osservazione 5.3.1}
+Un altro modo per esprimere il criterio di controllabilità per un sistema è il seguente
+\begin{equation}
+    rank
+    \begin{bmatrix}
+        P & A^n
+    \end{bmatrix}
+    = rank(P)
+\end{equation}
+\subsection*{Corollario 5.3.1} 
+Se il sistema è raggiungibile, allora è anche controllabile. Infatti se il sistema è raggiungibile allora $P$ ha rango pieno, e quindi qualunque altro vettore $x$ moltiplicato per $A^n$ e accostato a P, non aumenterebbe il rango, implicando perciò che tale vettore è anche controllabile.
+
+\newpage
+\subsection*{Teorema 5.4.1} 
+    \subsubsection*{Enunciato}
+    a) Il sottospazio degli stati raggiungibili è un sottoinsieme proprio del sottospazio degli stati controllabili
+    \begin{equation}
+        X_r \subset X_c
+    \end{equation}
+    b) Se il sistema è raggiungibile, allora è anche controllabile
+    \begin{equation}
+        Sistema \,\, raggiungibile \quad \Rightarrow \quad Sistema \,\, controllabile
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    a) Se uno stato $x$ è raggiungibile, allora anche lo stato $A^kx$ lo è, perchè essa è la risposta libera a partire dallo stato iniziale $x$, che per ipotesi è raggiungibile. Infatti, ricordando la proprietà 5.1.1 se uno stato $x$ è raggiungibile, allora qualunque altro stato $\overline{x}$ a cui il sistema arriva in evoluzione libera è anch'esso raggiungibile. In questo caso, si ribadisce, poichè $A^kx$ è proprio la risposta libera a partire dallo stato $x$, che per ipotesi è raggiungibile, allora anche $A^kx$ lo è. Ma se $A^kx$ è raggiungibile, significa che tale stato è contenuto dentro l'immagine di $P$, per il teorema 5.2.1a sul criterio di raggiungibilità. Ma, ancora, per il teorema 5.3.1a sul criterio di controllabilità, se uno stato $x$ è controllabile, allora $A^nx \in Im(P)$. Quindi si nota che se uno stato è raggiungibile, allora è sempre anche controllabile. Di conseguenza ne risulta la relazione di inclusione dei rispettivi sottospazi, ovvero che il sottospazio degli stati raggiungibili è un sottoinsieme proprio del sottospazio degli stati controllabili. \\ \\
+    b) Questa parte del teorema era stata già dedotta come corollario del teorema 5.3.1 sul criterio di controllabilità.
+\subsection*{Teorema 5.4.2}
+    \subsubsection*{Enunciato}
+    Se la matrice $A$ del sistema è non singolare, allora 
+    \begin{equation}
+        X_c = X_r = Im(P)
+    \end{equation}
+    Solo in questo caso quindi il sistema è controllabile se e solo se il sistema è raggiungibile.
+    \subsubsection*{Dimostrazione}
+    Per il teorema 5.4.1, vale sempre che se uno stato è raggiungibile allora è anche controllabile. Occorre dimostrare quindi che, solo nella condizione in cui $A$ sia non singolare, allora vale anche la relazione inversa, cioè che se uno stato è controllabile allora è anche raggiungibile. Per la proprietà 5.1.2, se lo stato $x$ è controllabile, allora lo è anche qualunque altro stato $\overline{x}$ dal quale il sistema possa giungere ad $x$ in evoluzione libera. Quindi se $x = A^n\overline{x}$, cioè se $x$ è raggiungibile in evoluzione libera a partire da $\overline{x}$, allora $\overline{x} = A^{-n}x$ è controllabile. Tale operazione è stata possibile proprio grazie al fatto che $A$ è per ipotesi non singolare, dunque invertibile. Quindi, per il criterio di controllabilità $A^n\overline{x} \in Im(P)$. Ma poichè $x = A^n\overline{x}$ allora anche $x \in Im(P)$, dunque per il criterio di raggiungibilità $x$ è raggiungibile.
+
+\newpage
+\subsection*{Teorema 5.4.3}
+    \subsubsection*{Premessa}
+    Sussiste ora un problema più generale riguardo al controllo, ovvero: dati due stati $x_0$ e $x_w$ con $x_0 \neq 0$, esiste un tempo $t$ e una funzione $u$ di controllo che permetta di raggiungere $x_w$ a partire da $x_0$? Cioè
+    \begin{equation}
+        A^{\overline{k}}x_0 + \sum_{h=0}^{\overline{k}}A^{\overline{k}-1-h}Bu(h) = x_w
+    \end{equation}
+    Nel caso banale in cui $x_0$ sia controllabile e $x_w$ sia raggiungibile la risposta è si. Sarà sufficiente scegliere un controllo che porti il sistema da $x_0$ a $0$ (poichè è controllabile) e poi da $0$ a $x_w$ (poichè è raggiungibile). Nel caso generale in cui invece $x_0$ e $x_w$ non sono raggiungibili e controllabili, allora la risposta dipende fortemente dall'istante $\overline{k}$. Il seguente teorema offre una soluzione a questo problema. 
+    \subsubsection*{Enunciato}
+    Dati due stati $x_0$, $x_w$ e un intero $\overline{k} > 0$, esiste una funzione $u$ che consente di raggiungere $x_w$ a partire da $x_0$ se e solo se
+    \begin{equation}
+        x_w - A^{\overline{k}}x_0 \in Im(P_\mu)
+    \end{equation}
+    \begin{equation}
+        \mu = min\{ \overline{k}, n \}
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    Nel caso $k < n$, l'espressione
+    \begin{equation}
+        A^{\overline{k}}x_0 + \sum_{h=0}^{\overline{k}}A^{\overline{k}-1-h}Bu(h) = x_w
+    \end{equation}
+    può essere riscritta spostando il termine $A^{\overline{k}}x_0$ a destra e passando alla forma matriciale
+    \begin{equation}
+        \begin{bmatrix}
+            A^{\overline{k}-1}B & A^{\overline{k}-2}B & ... & AB & B
+        \end{bmatrix}
+        \begin{bmatrix}
+            u(0) \\
+            u(1) \\
+            ... \\
+            u(\overline{k}-2) \\
+            u(\overline{k}-1)
+        \end{bmatrix}
+        = x_w - A^{\overline{k}}x_0
+    \end{equation}
+    Ed è immediato notare che la $u$ esiste se e solo se $x_w - A^{\overline{k}}x_0 \in Im(P_{\overline{k}})$. \\ \\
+    Per $k \ge n$ invece l'esistenza di $u$ equivale all'esistenza di una funzione d'ingresso che in tempo $\overline{k}$ permetta al sistema di raggiungere lo stato
+    \begin{equation}
+        x_w - A^{\overline{k}}x_0
+    \end{equation}
+    a partire da condizioni iniziali nulle. Ciò è evidentemente possibile, dal criterio della raggiungibilità nel teorema 5.2.1a, se e solo se
+    \begin{equation}
+        x_w - A^{\overline{k}}x_0 \in Im(P)
+    \end{equation}
+
+\newpage
+\section{Raggiungibilità e Controllabilità a tempo continuo}
+\subsection*{Lemma 5.5.4}
+    \subsubsection*{Premessa}
+    Per lo studio della raggiungibilità e controllabilità a tempo continuo si introduce una matrice $G(t)$ detta Gramiana
+    \begin{equation}
+        G(t) = \int_{0}^{t} e^{A\tau}BB'e^{A'\tau}\,d\tau
+    \end{equation}
+    \subsubsection*{Enunciato}
+    Per ogni numero reale $t \neq 0$ vale la relazione
+    \begin{equation}
+        Im(G(t)) = Im(P)
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    Per prima cosa conviene eseguire una sequenza di passi per poter effettuare la dimostrazione su una relazione equivalente. 
+    \begin{equation}
+        Im(G(t)) = Im(P) \iff Im(G(t)) = Im(PP')
+    \end{equation}
+    \begin{equation}
+        Im(G(t)) = Im(PP') \iff Im(G(t))^\bot = Im(PP')^\bot
+    \end{equation}
+    \begin{equation}
+        Im(G(t))^\bot = Im(PP')^\bot \iff Ker(G(t)) = Ker(PP')
+    \end{equation}
+    In ordine, ciascuna relazione è giustificata dalle seguenti proprietà:
+    \begin{itemize}
+        \item $Im(L) = Im(LL')$
+        \item Definizione di complemento ortogonale
+        \item $Im(L)^\bot = ker(L) \iff L \,\, simmetrica$
+    \end{itemize}
+    A questo punto, per dimostrare l'enunciato sarà sufficiente dimostrare la relazione 
+    \begin{equation}
+        ker(G(t)) = ker(PP')
+    \end{equation}
+    Poichè la Gramiana è definita come $G(t) = \int_{0}^{t} e^{A\tau}BB'e^{A'\tau}\,d\tau$, il suo nucleo sarà dato da tutti i vettori $x$ che soddisfano la relazione
+    \begin{equation}
+        \int_{0}^{t} e^{A\tau}BB'e^{A'\tau}x\,d\tau = 0
+    \end{equation}
+    Premoltiplicando per $x'$, per sola utilità ai fini della dimostrazione
+    \begin{equation}
+        \int_{0}^{t} x'e^{A\tau}BB'e^{A'\tau}x\,d\tau = \int_{0}^{t} (x'e^{A\tau}B)(x'e^{A\tau}B)'\,d\tau = 0
+    \end{equation}
+    Si può notare a questo punto che tale integrale è una norma, poichè è composto dal prodotto fra un vettore e il suo trasposto. Tale integrale quindi non potrà mai essere negativo, e in particolare l'unica soluzione per cui può valere $0$ è che
+    \begin{equation}
+        x'e^{A\tau}B = 0
+    \end{equation}
+    Perchè se tale vettore contenesse anche solo un elemento diverso da $0$, allora il prodotto per se stesso darebbe una norma maggiore di $0$. Per quanto riguarda $Ker(PP')$ invece, è composto da tutti i vettori $x$ tali che
+    \begin{equation}
+        PP'x = 0
+    \end{equation}
+    Ma poichè $Ker(PP') = Ker(P')$ allora
+    \begin{equation}
+        P'x = 0 \iff x'P = 0
+    \end{equation}
+    Cioè tali che
+    \begin{equation}
+        x'A^iB = 0
+    \end{equation}
+    Rimane quindi da dimostrare che
+    \begin{equation}
+        x'e^{A\tau}B = 0 \iff x'A^iB = 0
+    \end{equation}
+    Per quanto riguarda la freccia a destra, si nota che derivando $x'e^{A\tau}B$ un numero arbitrario di volte, si ottiene $x'A^ie^{A\tau}B$ che per $\tau = 0$ diventa proprio $x'A^iB$. Viceversa, per la freccia a sinistra si considera il teorema di Caley-Hamilton, per cui
+    \begin{equation}
+        A^{n+j} = -\sum_{i=0}^{n-1}a_iA^{i+j} \qquad \forall j \ge 0
+    \end{equation}
+    Premoltiplicando per $x'$ e postmoltiplicando per $B$ si ottiene
+    \begin{equation}
+        x'A^{n+j}B = 0 \qquad \forall j \ge 0
+    \end{equation}
+    Che equivale a dire
+    \begin{equation}
+        x'A^{h}B = 0 \qquad \forall h \in Z
+    \end{equation}
+    Ricordando l'espressione di un esponenziale di matrice, ovvero $e^{A\tau} = \sum_{h=0}^{\infty}\frac{t^h}{h!}A^h$, si ottiene
+    \begin{equation}
+        x'e^{A\tau}B = 0
+    \end{equation}
+\subsection*{Corollario 5.5.2}
+Dal lemma 5.5.4 si ricava che 
+\begin{equation}
+    x \in ker(G(t)) \iff x'e^{A\tau}B = 0
+\end{equation}
+
+\newpage
+\subsection*{Teorema 5.5.1}
+    \subsubsection*{Premessa}
+    Nel caso della raggiungibilità a tempo continuo, ci si riferisce ad uno stato $x$ raggiungibile con l'espressione 
+    \begin{equation}
+        x = \int_{0}^{t} e^{A(t-\tau)}Bu(\tau)\,d\tau
+    \end{equation}
+    \subsubsection*{Enunciato}
+    a) L'insieme $X_r$ degli stati raggiungibili coincide sia con l'immagine di $P$ sia con l'immagine di $G(t)$
+    \begin{equation}
+        X_r = Im(P)
+    \end{equation}
+    \begin{equation}
+        X_r = Im(G(t))
+    \end{equation}
+    b) Il sistema è raggiungibile se e solo se il rango di una delle due matrici $P$ o $G(t)$ è pari alla dimensione dello spazio di stato $n$
+    \begin{equation}
+        Sistema \,\, raggiungibile \iff rank(P) = n
+    \end{equation}
+    \begin{equation}
+        Sistema \,\, raggiungibile \iff rank(G(t)) = n
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    Poichè per il lemma 5.5.4 l'immagine di $G$ coincide con l'immagine di $P$, si useranno nel seguito in modo indistinto.\\ \\
+    a) $x \in X_r \Leftarrow x \in Im(G)$. Se uno stato $x \in Im(G)$ allora vuol dire che esiste un vettore $\beta$ tale che
+    \begin{equation}
+        x = G\beta = \left( \int_{0}^{t} e^{A\tau}BB'e^{A'\tau}\,d\tau \right) \beta
+    \end{equation}
+    Si definisce allora opportunamente un controllo $u$ fatto nel seguente modo
+    \begin{equation}
+        u(\tau) = B'e^{A'(t-\tau)}\beta
+    \end{equation}
+    Si calcola ora la risposta forzata $x_f(t)$
+    \begin{equation}
+        x_f(t) = \int_{0}^{t} e^{A(t-\tau)}Bu(\tau)\,d\tau
+    \end{equation}
+    E si inserisce all'interno l'espressione di $u(\tau)$
+    \begin{equation}
+        x_f(t) = \int_{0}^{t} e^{A(t-\tau)}BB'e^{A'(t-\tau)}\beta\,d\tau
+    \end{equation}
+    Effettuando la sostituzione $(t-\tau) = \theta$ si ottiene
+    \begin{equation}
+        x_f(t) = \left( \int_{0}^{t} e^{A\theta}BB'e^{A'\theta}\,d\theta \right) \cdot \beta
+    \end{equation}
+    E osservando il membro a sinistra si nota che è proprio pari ad $x$. Poichè quindi $x = x_f(t)$, allora $x$ è raggiungibile. \\ \\
+    $x \in X_r \Rightarrow x \in Im(G)$. Sia $x = x_a + x_b$ uno stato raggiungibile per ipotesi, con $x_a \in Im(G)$ e $x_b \in Im(G)^\bot$. Poichè sia $x$ che $x_a$ sono raggiungibili, allora anche $x_b$ lo è, in quanto differenza fra due stati raggiungibili. Si considera quindi 
+    \begin{equation}
+        x_b = \int_{0}^{t_b} e^{A(t_b-\tau)}Bu_b(\tau)\,d\tau
+    \end{equation}
+    Da una proprietà sui complementi ortogonali si ha che 
+    \begin{equation}
+        Im(L)^\bot = ker(L) \iff L \,\, Simmetrica
+    \end{equation}
+    Allora, poichè $G$ è simmetrica, si ha $x_b \in Im(G)^\bot \iff x_b \in ker(G)$, il che equivale a dire, per il corollario 5.5.2
+    \begin{equation}
+        x'_be^{A\tau}B = 0
+    \end{equation}
+    Di conseguenza, premoltiplicando per $x'_b$ entrambi i membri dell'espressione di $x_b$
+    \begin{equation}
+        x'_bx_b = \int_{0}^{t_b} x'_be^{A(t_b-\tau)}Bu_b(\tau)\,d\tau = 0
+    \end{equation}
+    In quanto nell'integrale è presente l'espressione $x'_be^{A\tau}B$ che è nulla. Ma se la somma dei quadrati delle componenti di un vettore è nulla, significa che il vettore stesso è nullo, per cui $x = x_a \in Im(G)$.\\ \\
+    b) Lo si evince facilmente dal fatto che $Im(G) = Im(P)$.
+
+\newpage
+\subsection*{Teorema 5.6.1}
+    \subsubsection*{Premessa}
+    Per lo studio della controllabilità a tempo continuo, l'espressione di uno stato $x$ controllabile si particolarizza nella seguente forma
+    \begin{equation}
+        e^{At}x + \int_{0}^{t} e^{A(t-\tau)}Bu(\tau)\,d\tau = 0
+    \end{equation}
+    \subsubsection*{Enunciato}
+    a) L'insieme $X_c$ degli stati controllabili del sistema coincide con l'immagine della matrice $P$ di raggiungibilità, o equivalentemente con l'immagine della matrice Gramiana $G(t)$
+    \begin{equation}
+        X_c = Im(P)
+    \end{equation}
+    \begin{equation}
+        X_c = Im(G(t))
+    \end{equation}
+    b) Il sistema è controllabile se e solo se vale una delle seguenti relazioni
+    \begin{equation}
+        rank(P) = n
+    \end{equation}
+    \begin{equation}
+        rank(G(t)) = n
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    Si nota facilmente come i due punti di questo teorema siano identici a quelli del teorema 5.5.1 sulla raggiungibilità a tempo continuo. Di conseguenza sarà sufficiente dimostrare che $X_c = X_r$, e quindi che $x \in X_r \iff x \in X_c$. \\ \\
+    $x \in X_r \Rightarrow x \in X_c$. Si considera uno stato $x$ per ipotesi raggiungibile. Allora per la proprietà 5.1.1 anche $\overline{x} = e^{At}x = \varphi (t, x, 0)$ sarà raggiungibile. Dunque, per il teorema 5.5.1a sulla raggiungibilità a tempo continuo, $\overline{x} \in Im(G(t))$. Ma poichè tale stato sta dentro l'immagine di $G$, allora esisterà un certo vettore $\beta$ tale che $-\overline{x} = G \cdot \beta$. Si sceglie allora opportunamente un controllo $u(\tau) = B'e^{A'(t-\tau)}\beta$ e a questo punto, scrivendo l'espressione della risposta completa
+    \begin{equation}
+        e^{At}x + \int_{0}^{t} e^{A(t-\tau)}Bu(\tau)\,d\tau
+    \end{equation}
+    Si nota che il termine $e^{At}x = \overline{x}$, e sostituendo nell'integrale l'espressione della $u(\tau)$ si ottiene
+    \begin{equation}
+        \int_{0}^{t} e^{A(t-\tau)}B (B'e^{A'(t-\tau)}\beta) \,d\tau
+    \end{equation}
+    E tirando fuori $\beta$ si ricava
+    \begin{equation}
+        \left( \int_{0}^{t} e^{A(t-\tau)}BB'e^{A'(t-\tau)}\,d\tau \right) \beta = G(t) \cdot \beta = -\overline{x}
+    \end{equation}
+    Quindi complessivamente
+    \begin{equation}
+        e^{At}x + \int_{0}^{t} e^{A(t-\tau)}Bu(\tau)\,d\tau = \overline{x} - \overline{x} = 0
+    \end{equation}
+    Che è la definizione di stato controllabile, dunque $x \in X_c$. \\ \\
+    $x \in X_r \Leftarrow x \in X_c$. Sia $x$ uno stato controllabile e tale che $x = x_a + x_b$, dove $x_a \in Im(G)$ e $x_b \in Im(G)^\bot$. Quindi siccome $x_a$ è raggiungibile, allora è anche controllabile, per il punto precedente. Di conseguenza anche $x_b = (x - x_a)$ è controllabile (poichè $X_c$ è un sottospazio). Allora se $x_b$ è controllabile vuol dire che esisteranno un istante $t_b$ e una funzione d'ingresso $u_b(\tau)$ tali che
+    \begin{equation}
+        e^{At_b}x_b + \int_{0}^{t_b} e^{A(t_b - \tau)}Bu_b(\tau)\,d\tau = 0
+    \end{equation}
+    Siccome $x_b \in Im(G)^\bot$ allora sarà vero anche che $x_b \in ker(G)$, dal momento che $G$ è simmetrica. Quindi, per il corollario 5.5.2 si ha
+    \begin{equation}
+        x'_be^{A\tau}B = 0
+    \end{equation}
+    A questo punto si premoltiplicano per $x'_be^{-At_b}$ entrambi i membri dell'espressione della risposta completa 
+    \begin{equation}
+        x'_be^{-At_b}e^{At_b}x_b + \int_{0}^{t_b} x'_be^{-At_b}e^{A(t_b - \tau)}Bu_b(\tau)\,d\tau = 0
+    \end{equation}
+    E si ottiene
+    \begin{equation}
+        x'_bx_b + \int_{0}^{t_b} x'_be^{-\tau}Bu_b(\tau)\,d\tau = 0
+    \end{equation}
+    Ne risulta quindi che $x'_bx_b = 0$, e dunque $x_b = 0$, poichè se è nulla la somma dei quadrati delle componenti è nullo il vettore stesso, quindi $x = x_a \in Im(G)$, cioè $x \in X_r$. 
+\subsection*{Corollario 5.6.2}
+a) Il sottospazio degli stati controllabili coincide con il sottospazio degli stati raggiungibili (questo vale in generale solo a tempo continuo).\\
+b) Il sistema è controllabile se e solo se è raggiungibile.
+
+\newpage
+\subsection*{Teorema 5.6.2}
+    \subsubsection*{Premessa}
+    Come nel caso a tempo discreto, si vuole affrontare adesso un problema più generale, ossia quello di trovare una funzione d'ingresso $u(\tau)$ che permetta ad un sistema di raggiungere un certo stato $x_w$ a partire da uno stato $x_0 \neq 0$. Questo, come nel caso a tempo discreto, è sempre possibile nel caso banale in cui $x_0$ sia controllabile e $x_w$ sia raggiungibile. Nel caso in cui nessuno dei due sia raggiungibile o controllabile invece la funzione $u(\tau)$ può ancora essere trovata, ma dipenderà in modo critico dall'istante di tempo $\overline{t}$ scelto. Tale problema può essere equivalentemente formulato tramite la relazione
+    \begin{equation}
+        e^{A\overline{t}}x_0 + \int_{0}^{\overline{t}} e^{A(\overline{t} - \tau)}Bu(\tau)\,d\tau = x_w
+    \end{equation}
+    E una soluzione a questo problema è proposta dal seguente teorema.  
+    \subsubsection*{Enunciato}
+    Dati due stati $x_0$ e $x_w$ e un istante $\overline{t} > 0$, esiste una funzione $u$ tale che $e^{A\overline{t}}x_0 + \int_{0}^{\overline{t}} e^{A(\overline{t} - \tau)}Bu(\tau)\,d\tau = x_w$ se e solo se
+    \begin{equation}
+        x_w - e^{A\overline{t}} \in Im(P)
+    \end{equation}
+    \begin{equation}
+        x_w - e^{A\overline{t}} \in Im(G)
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    L'esistenza di una funzione $u$ che permetta di soddisfare la relazione $e^{A\overline{t}}x_0 + \int_{0}^{\overline{t}} e^{A(\overline{t} - \tau)}Bu(\tau)\,d\tau = x_w$ equivale al fatto che il sistema possa raggiungere lo stato $x_w - e^{A\overline{t}}$ a partire da condizioni iniziali nulle. Ma questo implica che tale stato deve essere raggiungibile, dunque che deve stare dentro l'immagine di $P$ o, equivalentemente, di $G(t)$.
+
+\newpage
+\section{PBH Test, Retroazione dallo stato e Assegnazione degli autovalori}
+\subsection*{Proprietà 5.7.1}
+    \subsubsection*{Premessa}
+    La seguente proprietà è nota sotto il nome di PBH-Test di raggiungibilità. In generale, questo test ha esito positivo se e solo se il sistema è raggiungibile, ma in questo paragrafo, e in particolare in questa proprietà, si fa preliminarmente riferimento solo ad una delle due implicazioni, cioè se il sistema è raggiungibile, allora vale il PBH-Test.
+    \subsubsection*{Enunciato}
+    Se un sistema è raggiungibile, allora valgono le seguenti condizioni equivalenti
+    \begin{equation}
+        rank
+        \begin{bmatrix}
+            A - \lambda I & B
+        \end{bmatrix}
+        = n \qquad \forall \lambda \in C
+    \end{equation}
+    \begin{equation}
+        rank
+        \begin{bmatrix}
+            A - \lambda_i I & B
+        \end{bmatrix}
+        = n \qquad \forall \lambda_i \in \sigma(A)
+    \end{equation}
+    \begin{equation}
+        \forall \lambda_i \in \sigma(A), \quad \not \exists \, v'_i \neq 0 : \qquad v'_i
+        \begin{bmatrix}
+            A - \lambda_i I & B
+        \end{bmatrix}
+        = 0
+    \end{equation}
+    \begin{equation}
+        \forall \lambda_i \in \sigma(A), \quad \not \exists \, v'_i \neq 0 : \qquad v'_iA = \lambda_i v'_i \, , \quad v'_iB = 0
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    Si dimostra la proprietà per assurdo usando in particolare l'ultima delle 4 relazioni. Si suppone per assurdo che se un sistema è raggiungibile allora esiste un autovalore $\lambda_i$ con un relativo autovettore sinistro $v'_i \neq 0$ tale che 
+    \begin{equation}
+        v'_iA = \lambda_i v'_i
+    \end{equation}
+    \begin{equation}
+        v'_iB = 0
+    \end{equation}
+    Se il sistema è raggiungibile, allora significa che la matrice $P$ ha rango pieno, cioè
+    \begin{equation}
+        rank
+        \begin{bmatrix}
+            B & AB & ... & A^{n-1}B
+        \end{bmatrix}
+        = n
+    \end{equation}
+    Ma moltiplicando tale matrice per l'autovettore $v'_i$ si ottiene
+    \begin{equation}
+        v'_i
+        \begin{bmatrix}
+            B & AB & ... & A^{n-1}B
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            v'_iB & v'_iAB & ... & v'_iA^{n-1}B
+        \end{bmatrix}
+        = 
+        \begin{bmatrix}
+            v'_iB & \lambda_iv'_iB & ... & \lambda_i^{n-1}v'_iB
+        \end{bmatrix}
+        = 0
+    \end{equation}
+    Che va contro l'ipotesi che $P$ abbia rango pieno, e questo perchè $v'_i$ è diverso da 0. Dunque poichè si è verificato l'assurdo, allora vale la tesi.
+
+\newpage
+\subsection*{Proprietà 5.7.2 (Formula di Mitter per lo spostamento di 1 solo autovalore)}
+    \subsection*{Premessa}
+    Supponendo che un sistema sia raggiungibile, si è dimostrato che allora valgono le relazioni del PBH test. Si supponga di avere una matrice dinamica $A$ con tutti autovalori distinti, si vuole quindi provare a trovare una matrice $F$ tale che usandola nella legge di controllo $u$ la matrice dinamica risultante $A + BF$ abbia uno solo dei suoi autovalori modificati, lasciando tutti gli altri invariati. Allora poichè vale il PBH test, è noto che qualunque autovettore sinistro non nullo soddisfi la relazione
+    \begin{equation}
+        v'_iB \neq 0
+    \end{equation}
+    Perciò introducendo un vettore $f_a$ incognito si può dire certamente che il sistema
+    \begin{equation}
+        v'_aBf_a = \gamma_a - \lambda_a
+    \end{equation}
+    Ammette una soluzione. Trovata quindi una $f_a$ opportuna, si definisce la matrice $F$ come segue
+    \begin{equation}
+        F_a = f_av'_a
+    \end{equation}
+    Tale scelta permette di ritrovare nel nuovo sistema retroazionato una matrice dinamica $A + BF_a$ che abbia tutti gli autovalori diversi da $\lambda_a$ invariati, e l'autovalore $\gamma_a$ al posto di $\lambda_a$. Infatti
+    \begin{equation}
+        v'_a(A + BF_a) = v'_aA + v'_aBF_a = v'_aA + v'_aBf_av'_a = \lambda_av'_a + \gamma_av'_a - \lambda_av'_a = \gamma_av'_a
+    \end{equation}
+    e 
+    \begin{equation}
+        (A + BF_a)w_i = Aw_i + BF_aw_i = Aw_i + Bf_av'_aw_i = \lambda_iw_i
+    \end{equation}
+    Dove l'ultima uguaglianza è data dal fatto che, sotto l'ipotesi di autovalori tutti distinti fra loro, autovettori destri e sinistri sono fra loro ortogonali, perciò il loro prodotto è nullo. \\
+    Tale procedura è stata fatta sotto l'ipotesi che il sistema sia raggiungibile e che gli autovalori della matrice dinamica $A$ siano tutti distinti. La seguente proprietà offre invece una soluzione al problema più generale, senza nessuna delle due assunzioni.
+    \subsection*{Enunciato}
+    Se per un sistema vale il PBH test, allora la legge di controllo con la matrice $F_a = f_av'_a$ e $f_a$ tale che soddisfi $v'_aBf_a = \gamma_a - \lambda_a$, dà luogo ad un sistema la cui matrice dinamica $A + BF_a$ ha un polinomio caratteristico che coincide con quello di $A$, tranne che per un fattore $(\lambda - \lambda_a)$, che viene sostituito con $(\lambda - \gamma_a)$.
+    \subsection*{Dimostrazione}
+    Si sceglie una matrice $T$ invertibile tale che la prima riga sia $v'_a$
+    \begin{equation}
+        \begin{bmatrix}
+            v'_a \\
+            *
+        \end{bmatrix}
+    \end{equation}
+    Dunque $\hat{A} = TAT^{-1} \Rightarrow \hat{A}T = TA$, con
+    \begin{equation}
+        TA = 
+        \begin{bmatrix}
+            v'_aA \\
+            *
+        \end{bmatrix}
+    \end{equation}
+    Poichè $TT^{-1} = I$, essendo $v'_a$ la prima riga di $T$ si ha che
+    \begin{equation}
+        v'_aT^{-1} = 
+        \begin{bmatrix}
+            1 & 0 & 0 & ... & 0
+        \end{bmatrix}
+    \end{equation}
+    Cioè la prima riga dell'identità. A questo punto si procede a calcolare $\hat{A}$. 
+    \begin{equation}
+        \hat{A} = TAT^{-1} = 
+        \begin{bmatrix}
+            v'_aA \\
+            *
+        \end{bmatrix}
+        T^{-1} = 
+        \begin{bmatrix}
+            v'_aAT^-1 \\
+            *
+        \end{bmatrix}
+        = 
+        \begin{bmatrix}
+            \lambda_av'_aT^{-1} \\
+            *
+        \end{bmatrix}
+        = 
+        \begin{bmatrix}
+            \lambda_a & 0 & 0 & ... & 0 \\
+            & & * & &
+        \end{bmatrix}
+    \end{equation}
+    In particolare, $\hat{A}$ ha la seguente struttura
+    \begin{equation}
+        \hat{A} = 
+        \begin{bmatrix}
+            \lambda_a & 0 \\
+            * & A_0
+        \end{bmatrix}
+    \end{equation}
+    Dove $A_0$ è una matrice quadrata, tale che $p_{A_0}(\lambda) = \frac{p_A(\lambda)}{(\lambda - \lambda_a)}$. Per quanto riguarda la matrice $\hat{B}\hat{F}$
+    \begin{equation}
+        \hat{B}\hat{F} = TBFT^{-1} =
+        \begin{bmatrix}
+            v'_a \\
+            *
+        \end{bmatrix}
+        Bf_av'_aT^{-1} = 
+        \begin{bmatrix}
+            v'_aBf_A \\
+            *
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & 0 & 0 & ... & 0
+        \end{bmatrix}
+        = 
+        \begin{bmatrix}
+            \gamma_a - \lambda_a & 0 \\
+            * & 0
+        \end{bmatrix}
+    \end{equation}
+    Infine, mettendo insieme tutti i pezzi, si calcola $\hat{A} + \hat{B}\hat{F} = TAT^{-1} + TBFT^{-1} = T(AT^{-1} + BFT^{-1}) = T(A + BF)T^{-1}$
+    \begin{equation}
+        T(A + BF)T^{-1} = \hat{A} + \hat{B}\hat{F} =
+        \begin{bmatrix}
+            \lambda_a & 0 \\
+            * & A_0
+        \end{bmatrix}
+        + 
+        \begin{bmatrix}
+            \gamma_a - \lambda_a & 0 \\
+            * & 0
+        \end{bmatrix}
+        = 
+        \begin{bmatrix}
+            \gamma_a & 0 \\
+            * & A_0
+        \end{bmatrix}
+    \end{equation}
+    Poichè il cambio di base non altera il polinomio caratteristico, $p_{\hat{A} + \hat{B}\hat{F}} = p_{A + BF}$, così come anche $p_{\hat{A}} = p_A$. Di conseguenza, ricordando che il polinomio caratteristico di una matrice triangolare a blocchi è il prodotto dei polinomi caratteristici dei singoli blocchi, si ha che $ p_A = p_{\hat{A}} = (\lambda - \lambda_a) \cdot det(\lambda I - A_0)$ e $p_{A + BF} = p_{\hat{A} + \hat{B}\hat{F}} = (\lambda - \gamma_a) \cdot det(\lambda I - A_0)$. Dunque il polinomio caratteristico del sistema retroazionato è identico a quello del sistema originario, a meno un autovalore $\gamma_a$, come desiderato.
+
+\newpage
+\subsection*{Proprietà 5.7.3}
+    \subsubsection*{Premessa}
+    A questo punto ci si può chiedere quante volte sia lecito ripetere questo processo di spostamento degli autovalori. La seguente proprietà mette in evidenza proprio il fatto che se un sistema soddisfa il PBH test, allora anche il sistema retroazionato lo soddisferà, e quindi lo spostamento degli autovalori su di un sistema può essere eseguito iterativamente, fino a che il sistema avrà conseguito l'asintotica stabilità, e cioè avrà tutti gli autovalori con parte reale negativa per i sistemi a tempo continuo, e tutti gli autovalori in modulo minori di 1 per i sistemi a tempo discreto. Grazie a questa proprietà dunque, si instaura una importante relazione fra la raggiungibilità e la stabilizzabilità. 
+    \subsubsection*{Enunciato}
+    Un sistema soddisfa il PBH test se e solo se il sistema a ciclo chiuso retroazionato soddisfa il PBH test.
+    \begin{equation}
+        rank
+        \begin{bmatrix}
+            A - \lambda I & B
+        \end{bmatrix}
+        = n \iff rank
+        \begin{bmatrix}
+            A + BF - \lambda I & B
+        \end{bmatrix}
+        = n
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    $rank
+    \begin{bmatrix}
+        A - \lambda I & B
+    \end{bmatrix}
+    = n \Rightarrow rank
+    \begin{bmatrix}
+        A + BF - \lambda I & B
+    \end{bmatrix}
+    = n$. \\ \\
+    $rank
+    \begin{bmatrix}
+        A - \lambda I & B
+    \end{bmatrix}
+    = n \Leftarrow rank
+    \begin{bmatrix}
+        A + BF - \lambda I & B
+    \end{bmatrix}
+    = n$. Sottraendo alla nuova matrice dinamica a ciclo chiuso $A + BF$ il termine $BF$, si vanno a sommare colonne al primo blocco che sono combinazioni lineari della matrice $B$, dunque il rango rimane inalterato.
+
+\newpage
+\subsection*{Proprietà 5.7.4 (Formula di Mitter per lo spostamento di una coppia di autovalori)}
+    \subsubsection*{Premessa}
+    La procedura 5.7.2 permette di ricavare un sistema a ciclo chiuso che abbia un solo autovalore spostato, con tutti gli altri invariati. Sorge quindi il problema nel caso in cui un autovalore sia complesso, poichè è sempre presente il suo complesso coniugato, e quindi occorre spostarne 2 in un solo passaggio. La seguente proprietà, in modo molto simile alla 5.7.2, permette di spostare 2 autovalori insieme.
+    \subsubsection*{Enunciato}
+    Se un sistema soddisfa il PBH test, allora la legge di controllo con la $F_{ab}$ e gli scalari $\eta_a, \eta_b$, tali che
+    \begin{equation}
+        F_{ab} = \eta_a f_0 v'_a B + \eta_b f_0 v'_b B 
+    \end{equation}
+    dà luogo ad un sistema a ciclo chiuso il cui polinomio caratteristico è uguale a quello del sistema originario, tranne che per la sostituzione di un fattore $(\lambda - \lambda_a)(\lambda - \lambda_b)$, $\lambda_a \neq \lambda_b$, con il fattore $(\lambda - \gamma_a)(\lambda - \gamma_b)$.
+    \subsubsection*{Dimostrazione}
+    Per quanto riguarda la $f_0$, è sufficiente sceglierla in modo tale che $f_0 \neq 0$ e $v'_aBf_0 \neq 0$, $v'_bBf_0 \neq 0$. Gli scalari $\eta_a$, $\eta_b$ si ricavano invece dalle soluzioni del seguente sistema
+    \begin{equation}
+        \begin{cases}
+            \eta_av'_aBf_0 + \eta_bv'_bBf_0 = (\gamma_a + \gamma_b) - (\lambda_a + \lambda_b) \\
+            \lambda_b\eta_av'_aBf_0 + \lambda_a\eta_bv'_bBf_0 = (\gamma_a \gamma_b) - (\lambda_a \lambda_b)
+        \end{cases}
+    \end{equation}
+\newpage
+\section{Forme canoniche}
+\subsection*{Lemma 5.8.1}
+    \subsubsection*{Premessa}
+    La seguente forma canonica viene detta forma canonica di raggiungibilità
+    \subsubsection*{Enunciato}
+    Se un sistema ha un solo ingresso scalare, ovvero $p = 1$, allora è raggiungibile se e solo se esiste una matrice $T$ invertibile tale che il sistema nelle nuove coordinate è caratterizzato da
+    \begin{equation}
+        \hat{A} = 
+        \begin{bmatrix}
+            0 & 0 & ... & 0 & -a_0 \\
+            1 & 0 & ... & 0 & -a_1 \\
+            0 & 1 & ... & 0 & -a_2 \\
+            ... & ... & ... & ... & ... \\
+            0 & 0 & ... & 0 & -a_{n-2} \\
+            0 & 0 & ... & 1 & -a_{n-1} \\
+        \end{bmatrix}
+        \qquad
+        \hat{B} = 
+        \begin{bmatrix}
+            1 \\
+            0 \\
+            0 \\
+            ... \\
+            0 \\
+            0
+        \end{bmatrix}   
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    $\Rightarrow$. Sia $S(A, B)$ un sistema raggiungibile. Se ha un solo ingresso scalare, allora la sua $P$ sarà quadrata e invertibile, poichè essendo raggiungibile avrà rango pieno. Allora si può scegliere $T^{-1} = P$. Questa scelta implica che $\hat{P} = I$. Infatti
+    \begin{equation}
+        \hat{P} = TP = TT^{-1} = I
+    \end{equation}
+    Ne segue che se la $\hat{P}$ ha come prima colonna la matrice $\hat{B}$, allora $\hat{B}$ altro non è che la prima colonna dell'identità di ordine $n$, che si indicherà nel seguito con $e_1$. Dunque è vero anche che 
+    \begin{equation}
+        \hat{A}\hat{B} = e_2 \qquad \hat{A}^2\hat{B} = e_3 \qquad ... \qquad \hat{A}^{n-2}\hat{B} = e_{n-1} \qquad \hat{A}^{n-1}\hat{B} = e_n
+    \end{equation}
+    E più in generale
+    \begin{equation}
+        \hat{A}^{h-1}\hat{B} = e_h
+    \end{equation}
+    Indicando quindi con $\hat{A}_h$ la h-esima colonna di $\hat{A}$, che si ricava moltiplicando $\hat{A}$ per la h-esima colonna dell'identità, cioè $\hat{A}_h = \hat{A}e_h$, si ottiene
+    \begin{equation}
+        \hat{A}_h = \hat{A}e_h = \hat{A}\hat{A}^{h-1}\hat{B} = \hat{A}^h\hat{B} = e_{h+1}
+    \end{equation}
+    Infine, per $h = n$, si deduce dal teorema di Caley-Hamilton che
+    \begin{equation}
+        \hat{A}_n = \hat{A}^n\hat{B} = -\sum_{h=0}^{n-1}a_h\hat{A}^h\hat{B} = \sum_{h=0}^{n-1}-a_he_{h+1}
+    \end{equation}\\ \\
+    $\Leftarrow$. Se esiste una matrice $T$ che dà luogo a tale coppia di matrici $(\hat{A}, \hat{B})$, allora la $\hat{P}$ sarà costituita da colonne della matrice identità, dunque avrà rango $n$, e quindi il sistema è raggiungibile.
+    
+\newpage
+\subsection*{Lemma 5.8.2}
+    \subsubsection*{Premessa}
+    La seguente forma canonica viene detta forma canonica di controllore
+    \subsubsection*{Enunciato}
+    Se un sistema ha un solo ingresso scalare, ovvero $p = 1$, allora è raggiungibile se e solo se esiste una matrice $T$ invertibile tale che il sistema nelle nuove coordinate è caratterizzato da
+    \begin{equation}
+        \hat{A} = 
+        \begin{bmatrix}
+            -a_{n-1} & -a_{n-2} & ... & -a_1 & -a_0 \\
+            1 & 0 & ... & 0 & 0 \\
+            0 & 1 & ... & 0 & 0 \\
+            ... & ... & ... & ... & ... \\
+            0 & 0 & ... & 0 & 0 \\
+            0 & 0 & ... & 1 & 0 \\
+        \end{bmatrix}
+        \qquad
+        \hat{B} = 
+        \begin{bmatrix}
+            1 \\
+            0 \\
+            0 \\
+            ... \\
+            0 \\
+            0
+        \end{bmatrix}   
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    $\Rightarrow$. Sia $S(A, B)$ un sistema raggiungibile. Si costruisce una base $T = \{ e_1, e_2, ..., e_n \}$ che porta il sistema $S(A, B)$ nella forma $S(\hat{A}, \hat{B})$. Allora occorre dimostrare che la $T$ è invertibile. Si pone innanzitutto $e_1 = B$. Poi, per il teorema di Caley-Hamilton si ha che
+    \begin{equation}
+        A^n + \sum_{i=0}^{n-1} a_iA^i = 0
+    \end{equation}
+    Post-moltiplicando per $B$ e sviluppando la somma
+    \begin{equation}
+        A^nB + a_{n-1}A^{n-1}B + a_{n-2}A^{n-2}B + ... + a_{1}AB + a_0B = 0
+    \end{equation}
+    A questo punto si raccoglie $A$
+    \begin{equation}
+        A(A^{n-1}B + a_{n-1}A^{n-2}B + a_{n-2}A^{n-3}B + ... + a_{1}B) + a_0B = 0
+    \end{equation}
+    In modo che definendo $e_n = A^{n-1}B + a_{n-1}A^{n-2}B + a_{n-2}A^{n-3}B + ... + a_{1}B$ si ottiene
+    \begin{equation}
+        Ae_n = -a_0B = -a_0e_1
+    \end{equation}
+    Si procede nello stesso modo, ma su $e_n$, cioè si raccoglie $A$
+    \begin{equation}
+        e_n = A(A^{n-2}B + a_{n-1}A^{n-3}B + a_{n-2}A^{n-4}B + ... + a_{2}B) + a_{1}B
+    \end{equation}
+    Definendo $e_{n-1} = A^{n-2}B + a_{n-1}A^{n-3}B + a_{n-2}A^{n-4}B + ... + a_{2}B$ e quindi $Ae_{n-1} = e_n - a_1e_1$. Procedendo ricorsivamente, si ottengono le due relazioni
+    \begin{equation}
+        e_h = A^{h-1}B + a_{n-1}A^{h-2}B + a_{n-2}A^{h-3}B + ... + a_{n-h-2}AB + a_{n-h-1}B
+    \end{equation}\begin{equation}
+        Ae_h = e_{h+1} - a_{n-h}e_1
+    \end{equation}
+    Utilizzando la forma generale trovata per $e_h$ si costruisce la base $\{ e_1, e_2, ..., e_n \}$
+    \begin{equation}
+        \begin{bmatrix}
+            e_1 & e_2 & ... & e_{n-1} & e_n
+        \end{bmatrix}
+        = 
+        \begin{bmatrix}
+            B & AB & A^2B & ... & A^{h-2}B & A^{h-1}B
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & a_{n-1} & a_{n-2} & ... & a_2 & a_1 \\
+            0 & 1 & a_{n-1} & ... & a_3 & a_2 \\
+            0 & 0 & 1 & ... & a_4 & a_3 \\
+            ... & ... & ... & ... & ... & ... \\
+            0 & 0 & 0 & ... & 1 & a_{n-1} \\
+            0 & 0 & 0 & ... & 0 & 1
+        \end{bmatrix}
+    \end{equation}
+    Poichè il sistema è raggiungibile per ipotesi, la $P$ ha rango pieno, e anche la matrice a destra ha rango pieno, perchè triangolare superiore di dimensione $n$. Allora si può definire
+    \begin{equation}
+        T^{-1} = 
+        \begin{bmatrix}
+            e_1 & e_2 & ... e_{n-1} & e_n   
+        \end{bmatrix}
+    \end{equation}
+    A questo punto, si ha
+    \begin{equation}
+        AT^{-1} = A
+        \begin{bmatrix}
+            e_1 & e_2 & ... & e_{n-1} & e_n
+        \end{bmatrix}
+        = 
+        \begin{bmatrix}
+            Ae_1 & Ae_2 & ... & Ae_{n-1} & Ae_n
+        \end{bmatrix}
+    \end{equation}
+    Ma poichè tutte queste espressioni sono già note, si ricava
+    \begin{equation}
+       AT^{-1} =
+        \begin{bmatrix}
+            e_2 - a_{n-1}e_1 & e_3 - a_{n-2}e_1 & ... & e_n - a_1e_1 & -a_0e_1
+        \end{bmatrix}
+        =
+    \end{equation}
+    \begin{equation}
+        = 
+        \begin{bmatrix}
+            e_1 & e_2 & ... & e_{n-1} & e_n
+        \end{bmatrix}
+        \begin{bmatrix}
+            -a_{n-1} & -a_{n-2} & ... & -a_1 & -a_0 \\
+            1 & 0 & ... & 0 & 0 \\
+            0 & 1 & ... & 0 & 0 \\
+            ... & ... & ... & ... & ... \\
+            0 & 0 & ... & 0 & 0 \\
+            0 & 0 & ... & 1 & 0 \\
+        \end{bmatrix}
+        =
+    \end{equation}
+    \begin{equation}
+        = T^{-1}
+        \begin{bmatrix}
+            -a_{n-1} & -a_{n-2} & ... & -a_1 & -a_0 \\
+            1 & 0 & ... & 0 & 0 \\
+            0 & 1 & ... & 0 & 0 \\
+            ... & ... & ... & ... & ... \\
+            0 & 0 & ... & 0 & 0 \\
+            0 & 0 & ... & 1 & 0 \\
+        \end{bmatrix}
+    \end{equation}
+    Premoltiplicando il primo e l'ultimo membro per $T$ si ottiene che
+    \begin{equation}
+        TAT^{-1} = \hat{A} = 
+        \begin{bmatrix}
+            -a_{n-1} & -a_{n-2} & ... & -a_1 & -a_0 \\
+            1 & 0 & ... & 0 & 0 \\
+            0 & 1 & ... & 0 & 0 \\
+            ... & ... & ... & ... & ... \\
+            0 & 0 & ... & 0 & 0 \\
+            0 & 0 & ... & 1 & 0 \\
+        \end{bmatrix}
+    \end{equation} \\ \\
+    $\Leftarrow$. Esiste una matrice $T$ che porta il sistema nella forma dell'enunciato. Ma la matrice $\hat{P}$ che viene fuori è una matrice che ha rango pieno, perchè è triangolare superiore. Quindi il sistema è raggiungibile.
+
+\newpage
+\subsection*{Teorema 5.8.2}
+    \subsubsection*{Premessa}
+    Il seguente enunciato è anche noto come formula di Ackermann
+    \subsubsection*{Enunciato}
+    Se un sistema è raggiungibile e ha un solo ingresso scalare ($p = 1$), allora fissato un arbitrario polinomio monico del tipo $p_{des}(\lambda) = \lambda^n + \sum_{i=0}^{n_1} a_i\lambda^i$, l'unica matrice $F$ tale che il sistema a ciclo chiuso $A + BF$ abbia tale polinomio come polinomio caratteristico è 
+    \begin{equation}
+        F = -\pi_np_{des}(A)
+    \end{equation}
+    Dove $\pi_n$ è l'ultima riga dell'inversa della matrice $P$ di raggiungibilità.
+    \subsubsection*{Dimostrazione}
+    Si consideri un cambiamento di base tale che $T$ porti il sistema nella forma canonica di controllore, di seguito riportata
+    \begin{equation}
+        \hat{A} = 
+        \begin{bmatrix}
+            -a_{n-1} & -a_{n-2} & ... & -a_1 & -a_0 \\
+            1 & 0 & ... & 0 & 0 \\
+            0 & 1 & ... & 0 & 0 \\
+            ... & ... & ... & ... & ... \\
+            0 & 0 & ... & 0 & 0 \\
+            0 & 0 & ... & 1 & 0 \\
+        \end{bmatrix}
+        \qquad
+        \hat{B} = 
+        \begin{bmatrix}
+            1 \\
+            0 \\
+            0 \\
+            ... \\
+            0 \\
+            0
+        \end{bmatrix} 
+    \end{equation}
+    Si indica ora con $\tau'_i$ la i-esima riga della matrice $T$. Allora, poichè $TT^{-1} = I$ si ha che
+    \begin{equation}
+        \tau'_nT^{-1} = 
+        \begin{bmatrix}
+            0 & 0 & 0 & ... & 0 & 1
+        \end{bmatrix}
+    \end{equation}
+    Cioè in pratica si sta selezionando l'ultima riga dell'identità. Ma dal lemma 5.8.2 sulla forma canonica di controllore, si era ricavata per $T^{-1}$ l'espressione
+    \begin{equation}
+        T^{-1} = 
+        \begin{bmatrix}
+            e_1 & e_2 & ... e_{n-1} & e_n   
+        \end{bmatrix}
+        = 
+        \begin{bmatrix}
+            B & AB & A^2B & ... & A^{h-2}B & A^{h-1}B
+        \end{bmatrix}
+        \begin{bmatrix}
+            1 & a_{n-1} & a_{n-2} & ... & a_2 & a_1 \\
+            0 & 1 & a_{n-1} & ... & a_3 & a_2 \\
+            0 & 0 & 1 & ... & a_4 & a_3 \\
+            ... & ... & ... & ... & ... & ... \\
+            0 & 0 & 0 & ... & 1 & a_{n-1} \\
+            0 & 0 & 0 & ... & 0 & 1
+        \end{bmatrix}
+    \end{equation}
+    Quindi, chiamando l'ultima matrice a destra $M$
+    \begin{equation}
+        \tau'_nT^{-1} = \tau'_nPM = 
+        \begin{bmatrix}
+            0 & 0 & 0 & ... & 0 & 1
+        \end{bmatrix}
+    \end{equation}
+    A questo punto si nota che siccome $M$ è quadrata e triangolare superiore, allora è invertibile e in particolare la sua inversa mantiene la stessa struttura, cioè è ancora triangolare superiore, con tutti $1$ sulla diagonale principale. E quindi, si ottiene
+    \begin{equation}
+        \tau'_nP = 
+        \begin{bmatrix}
+            0 & 0 & 0 & ... & 0 & 1
+        \end{bmatrix}
+        M^{-1} = \tau'_nP = 
+        \begin{bmatrix}
+            0 & 0 & 0 & ... & 0 & 1
+        \end{bmatrix}
+    \end{equation}
+    Dunque confrontando le espressioni
+    \begin{equation}
+        \tau'_nT^{-1} = 
+        \begin{bmatrix}
+            0 & 0 & 0 & ... & 0 & 1
+        \end{bmatrix}
+    \end{equation}
+    \begin{equation}
+        \tau'_nP = 
+        \begin{bmatrix}
+            0 & 0 & 0 & ... & 0 & 1
+        \end{bmatrix}
+    \end{equation}
+    Si nota che $\tau'_n$ è sia l'ultima riga di $T$, sia l'ultima riga dell'inversa della matrice $P$ di raggiungibilità, che verrà chiamata $\pi'_n$. Ora si scrive l'espressione per $\hat{A}T = TA$, utile per definire la matrice $T$
+    \begin{equation}
+        \begin{bmatrix}
+            -a_{n-1} & -a_{n-2} & ... & -a_1 & -a_0 \\
+            1 & 0 & ... & 0 & 0 \\
+            0 & 1 & ... & 0 & 0 \\
+            ... & ... & ... & ... & ... \\
+            0 & 0 & ... & 0 & 0 \\
+            0 & 0 & ... & 1 & 0 \\
+        \end{bmatrix}
+        \begin{bmatrix}
+            \tau'_1 \\
+            \tau'_2 \\
+            \tau'_3 \\
+            ... \\
+            \tau'_{n-1} \\
+            \tau'_n 
+        \end{bmatrix}
+        = 
+        \begin{bmatrix}
+            \tau'_1 \\
+            \tau'_2 \\
+            \tau'_3 \\
+            ... \\
+            \tau'_{n-1} \\
+            \tau'_n 
+        \end{bmatrix}
+        A
+    \end{equation}
+    E scrivendo il sistema lineare equivalente a partire dall'ultima riga andando verso l'alto, escludendo la prima riga, si ha
+    \begin{equation}
+        \begin{cases}
+            \tau'_{n-1} = \tau'_nA \\
+            \tau'_{n-2} = \tau'_{n-1}A \\
+            \tau'_{n-3} = \tau'_{n-2}A \\
+            ... \\
+            \tau'_1 = \tau'_2A 
+        \end{cases}
+        \quad \Rightarrow \quad
+        \begin{cases}
+            \tau'_{n-1} = \tau'_nA \\
+            \tau'_{n-2} = (\tau'_nA)A = \tau'_nA^2 \\
+            \tau'_{n-3} = (\tau'_nA^2)A = \tau'_nA^3 \\
+            ... \\
+            \tau'_1 = \tau'_nA^{n-1} 
+        \end{cases}
+    \end{equation}  
+    Mentre la $\hat{F}$ sarà definita dagli scalari $\hat{f}_i = a_i - \overline{a}_i$, cioè pari alla differenza fra i coefficienti del polinomio caratteristico di $A$ e i coefficienti del polinomio desiderato. Quindi poichè $F = \hat{F}T$ si ottiene
+    \begin{equation}
+        F = \hat{F}T = 
+        \begin{bmatrix}
+            \hat{f}_{n-1} & \hat{f}_{n-2} & ... & \hat{f}_{1} & \hat{f}_{0}
+        \end{bmatrix}
+        \begin{bmatrix}
+            \tau'_nA^{n-1} \\
+            \tau'_nA^{n-2} \\
+            ... \\
+            \tau'_nA \\
+            \tau'_n 
+        \end{bmatrix}
+        = \tau'_n\sum_{i=0}^{n-1}(a_i - \overline{a}_i)A^i
+    \end{equation}
+    Espandendo la sommatoria, sostituendo $\tau'_n$ con $\pi'_n$ e applicando il teorema di Caley-Hamilton, si ottiene
+    \begin{equation}
+        F = \tau'_n \left( \sum_{i=0}^{n-1}a_iA^i - \sum_{i=0}^{n-1}\overline{a}_iA^i \right) = \pi'_n \left( -A^n - \sum_{i=0}^{n-1}\overline{a}_iA^i \right) = -\pi'_n \cdot p_{des}(A)
+     \end{equation}
+
+\newpage
+\subsection*{Lemma 5.8.6 (di Heymann)}
+    \subsubsection*{Premessa}
+    I risultati ottenuti per ingressi scalari sono estendibili ai casi in cui $p > 1$ grazie al seguente lemma, conosciuto come Lemma di Heymann. Prima di enunciarlo però, è conveniente richiamare alcuni risultati preliminari.\\ \\
+    Anzitutto, si comincia col dire che il sottospazio degli stati raggiungibili è un sottospazio $A$-invariante, cioe se $x \in X_r$ allora $Ax \in X_r$, e questo vale per ogni stato $x$ raggiungibile. Infatti, nel caso a tempo discreto, se $x$ è uno stato raggiungibile, $Ax$ altro non è che l'evoluzione libera del sistema a partire dallo stato $x$, dunque è raggiungibile. A tempo continuo invece, basta notare che il sottospazio degli stati raggiungibili coincide con quello dei sistemi a tempo discreto, in quanto $Im(G(t)) = Im(P)$.\\ \\ 
+    Inoltre, poichè $X_r = Im(P) = Im \begin{bmatrix} B & AB & A^2B & ... & A^{n-1}B \end{bmatrix}$, allora $Im(B) \subset X_r$, cioè $X_r$ è un sottospazio $A$-invariante che contiene $Im(B)$. Ma in particolare, dato un insieme di sottospazi $A$-invarianti che contengono $Im(B)$, si ha che $X_r$ è il più piccolo fra tutti, cioè praticamente è contenuto in qualunque altro sottospazio $A$-invariante che contiene $Im(B)$. Infatti, se $V$ è un qualunque sottospazio $A$-invariante tale che $Im(B) \subset V$, allora essendo $A$-invariante si avrà che $A \cdot Im(B) = Im(B) \subset V$, cioè $Im\begin{bmatrix}B & AB\end{bmatrix} \subset V$. Ripetendo il passaggio $n$ volte, si ottiene che $Im\begin{bmatrix} 
+    B & AB & A^2B & ... & A^{n-1}B \end{bmatrix} = Im(P) = X_r \subset V$.\\ \\
+    A questo punto è possibile enunciare il Lemma di Heymann.
+    \subsubsection*{Enunciato}
+    Se il sistema è raggiungibile e la dimensione del vettore d'ingresso $u(t)$ non è scalare ($p>1$), esiste una matrice $F$ tale che il sistema in retroazione dallo stato a ciclo chiuso
+    \begin{equation}
+        \Delta x(t) = (A + BF)x(t) + b_iv_i(t)
+    \end{equation}
+    è raggiungibile, con $b_i$ che è una colonna non nulla della matrice $B$, e $v_i(t)$ una funzione d'ingresso scalare.
+    
+\newpage
+\section{Decomposizione di Kalman rispetto alla raggiungibilità}
+\subsection*{Teorema 5.9.1}
+    \subsubsection*{Premessa}
+    Questo teorema, noto come Teorema di Kalman, ha l'obiettivo di effettuare una decomposizione del sistema in modo da estrarre un sotto-sistema che sia interamente raggiungibile.
+    \subsubsection*{Enunciato}
+    Se il sistema non è raggiungibile, allora esiste un cambiamento di base tale che le matrici nella nuova base $\hat{A}, \hat{B}, \hat{C}$ abbiano la struttura seguente
+    \begin{equation}
+        \hat{A} =
+        \begin{bmatrix}
+            A_{rr} & A_{ru} \\
+            0 & A_{uu}
+        \end{bmatrix}
+        \qquad
+        \hat{B} =
+        \begin{bmatrix}
+            B_r \\
+            0
+        \end{bmatrix}
+        \qquad
+        \hat{C} =
+        \begin{bmatrix}
+            C_r & C_u
+        \end{bmatrix}
+    \end{equation}
+    Dove $A_{rr}$ e $B_r$ sono tali che il sotto-sistema descritto da queste matrici è raggiungibile.
+    \subsubsection*{Dimostrazione}
+    Si costruisce una matrice $T^{-1}$ che abbia la seguente struttura
+    \begin{equation}
+        T^{-1} = 
+        \begin{bmatrix}
+            e_1 & e_2 & ... & e_{n_r} & e_{n_r + 1} & ... & e_n
+        \end{bmatrix}
+    \end{equation}
+    Dove le prime $n_r$ colonne formano una base per $Im(P)$, mentre le successive $n - n_r$ colonne sono un completamento di base per lo spazio di stato $R^n$. In questo modo, partizionando lo stato $\hat{x}$ nel seguente modo
+    \begin{equation}
+        x = T^{-1}\hat{x} \iff \hat{x} = 
+        \begin{bmatrix}
+            x_r \\
+            x_u
+        \end{bmatrix}
+    \end{equation}
+    Si ottiene che la componente $x_u$ dev'essere nulla per la raggiungibilità di $x$. Coerentemente con la partizione di $\hat{x}$, si definiscono quindi le matrici $\hat{A}$ e $\hat{B}$
+    \begin{equation}
+        \hat{A} = 
+        \begin{bmatrix}
+            A_{rr} & A_{ru} \\
+            A_{ur} & A_{uu}
+        \end{bmatrix}
+        \qquad
+        \hat{B} = 
+        \begin{bmatrix}
+            B_r \\
+            B_u
+        \end{bmatrix}
+    \end{equation}
+    Poichè $X_r$ è un sottospazio $A$-invariante, se $x$ è raggiungibile allora lo è anche $Ax$. Quindi $\hat{A}\hat{x}$, che sarà partizionato ugualmente a $\hat{x}$, dovrà avere la seconda partizione nulla. In particolare
+    \begin{equation}
+        \hat{A}\hat{x} =
+        \begin{bmatrix}
+            A_{rr} & A_{ru} \\
+            A_{ur} & A_{uu}
+        \end{bmatrix} 
+        \begin{bmatrix}
+            x_r \\
+            x_u
+        \end{bmatrix}
+        = 
+        \begin{bmatrix}
+            A_{rr}x_r + A_{ru}x_u \\
+            A_{ur}x_r + A_{uu}x_u
+        \end{bmatrix}
+    \end{equation}
+    Quindi, poichè $x_u = 0$ per la raggiungibilità di $x$
+    \begin{equation}
+        A_{ur}x_r = 0 \quad \Rightarrow \quad A_{ur} = 0
+    \end{equation}
+    Per l'arbitrarietà di $x_r$. Stesso discorso vale per $\hat{B}$. Infatti, poichè $Im(\hat{B}) \subset Im(\hat{P}) = \hat{X}_r$, allora anche $\hat{B}$ dovrà avere la sua seconda partizione nulla, coerentemente con la scelta del cambio di base effettuata. Cioè
+    \begin{equation}
+        \hat{B} = 
+        \begin{bmatrix}
+            B_r \\
+            0
+        \end{bmatrix}
+    \end{equation}
+    A questo punto si scrive l'espressione per la $\hat{P}$
+    \begin{equation}
+        \hat{P} =
+        \begin{bmatrix}
+            \hat{B} & \hat{A}\hat{B} & \hat{A}^2\hat{B} & ... & \hat{A}^{n-1}\hat{B}
+        \end{bmatrix} 
+        = 
+        \begin{bmatrix}
+            B_r & A_{rr}B_r & A_{rr}^2B_r & ... & A_{rr}^{n-1}B_r \\
+            0 & 0 & 0 & ... & 0
+        \end{bmatrix}
+    \end{equation}
+    Siccome il cambiamento di base non altera il rango della $P$, che già aveva rango $n_r$ per ipotesi, e inoltre gli elementi nulli non danno contributo al rango, si ottiene che
+    \begin{equation}
+        rank [ \hat{P} ] = n_r
+    \end{equation}
+    Ovvero il sottosistema $S(\hat{A}, \hat{B})$ è raggiungibile.
+
+\newpage
+\subsection*{Teorema 5.9.2}
+    \subsubsection*{Enunciato}
+    Se il sistema non è raggiungibile, allora la matrice di trasferimento ingresso-uscita è data da
+    \begin{equation}
+        W(s) = C_r(sI - A)^{-1}B_r + D
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    \begin{equation}
+        (sI - \hat{A})^{-1} =
+        \begin{bmatrix}
+            (sI - A_{rr})^{-1} & -(sI - A_{rr})^{-1}A_{ru}(sI - A_{uu})^{-1} \\
+            0 & (sI - A_{uu})^{-1}
+        \end{bmatrix}
+    \end{equation}
+    Poichè $\hat{A}$ è quadrata a blocchi. Allora segue direttamente che
+    \begin{equation}
+        W(s) = \hat{C}(sI - \hat{A})^{-1}\hat{B} + \hat{D} = 
+        \begin{bmatrix}
+            C_r & C_u
+        \end{bmatrix}
+        \begin{bmatrix}
+            (sI - A_{rr})^{-1} & * \\
+            0 & *
+        \end{bmatrix}
+        \begin{bmatrix}
+            B_r \\
+            0
+        \end{bmatrix}
+        + D
+    \end{equation}
+    Quindi
+    \begin{equation}
+    W(s) = C_r(sI - A_{rr})^{-1}B_r + D
+    \end{equation}
+
+\newpage
+\subsection*{Teorema 5.9.3}
+    \subsubsection*{Premessa}
+    Grazie al seguente risultato, si andrà a dimostrare che la raggiungibilità non è solo condizione necessaria per il soddisfacimento del PBH-Test (e quindi per lo spostamento degli autovalori, dunque per la stabilizzabilità) ma anche sufficiente.
+    \subsubsection*{Enunciato}
+    a) Il sistema è raggiungibile se e solo se soddisfa il PBH-Test, vale a dire una delle seguenti 4 condizioni
+    \begin{equation}
+        rank
+        \begin{bmatrix}
+            A - \lambda I & B
+        \end{bmatrix}
+        = n \qquad \forall \lambda \in C
+    \end{equation}
+    \begin{equation}
+        rank
+        \begin{bmatrix}
+            A - \lambda_i I & B
+        \end{bmatrix}
+        = n \qquad \forall \lambda_i \in \sigma(A)
+    \end{equation}
+    \begin{equation}
+        \forall \lambda_i \in \sigma(A), \quad \not \exists \, v'_i \neq 0 : \qquad v'_i
+        \begin{bmatrix}
+            A - \lambda_i I & B
+        \end{bmatrix}
+        = 0
+    \end{equation}
+    \begin{equation}
+        \forall \lambda_i \in \sigma(A), \quad \not \exists \, v'_i \neq 0 : \qquad v'_iA = \lambda_i v'_i \, , \quad v'_iB = 0
+    \end{equation} \\ \\
+    b) Se il sistema non è raggiungibile, allora gli autovalori della matrice dinamica $A_{uu}$, cioè quella relativa al sottosistema non raggiungibile, sono i soli autovalori che non soddisfano le condizioni del PBH-Test.
+    \subsubsection*{Dimostrazione}
+    a) La necessità è stata già dimostrata nel paragrafo 2. Per quanto riguarda la sufficienza, si supponga che se 1 delle 4 condizioni del PBH-Test vale, allora il sistema non è raggiungibile. Se il sistema non è raggiungibile quindi esisterà un certo autovalore $\lambda_u$ non raggiungibile che in teoria dovrebbe comunque soddisfare il PBH test. Si costruisce quindi un autovettore sinistro, relativo a $\lambda_u$, fatto nel seguente modo $\begin{bmatrix}0'_{n_r} & v'_u\end{bmatrix}$, dove $0'_{n_r}$ indica che le prime $n_r$ componenti del vettore sono tutte nulle, ma l'autovettore complessivamente è non nullo. Allora si ha
+    \begin{equation}
+        \begin{bmatrix}
+            0'_{n_r} & v'_u
+        \end{bmatrix}
+        \begin{bmatrix}
+            \hat{A} - \lambda_uI & \hat{B}
+        \end{bmatrix}
+        = 
+        \begin{bmatrix}
+            0'_{n_r} & v'_u
+        \end{bmatrix}
+        \begin{bmatrix}
+            A_{rr} - \lambda_uI & A_{ru} - \lambda_uI & B_r \\
+            0 & A_{uu} - \lambda_uI & 0
+        \end{bmatrix}
+    \end{equation}
+    \begin{equation}
+        = 
+        \begin{bmatrix}
+            0 & v'_u(A_{uu} - \lambda_uI) & 0
+        \end{bmatrix}
+        = v'_u 
+        \begin{bmatrix}
+            0 & A_{uu} - \lambda_uI & 0
+        \end{bmatrix}
+        = 0'_{n+p}
+    \end{equation}
+    Perchè l'unico prodotto che rimane è $v'_u(A_{uu} - \lambda_uI)$, che è proprio la definizione di autovettore, dunque è pari a $0$, infrangendo la condizione 3 del PBH-Test. Ma per ipotesi il PBH valeva su ogni autovalore $\lambda_i \in \sigma (A)$, quindi l'assurdo dimostra la tesi.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+\section{Osservabilità}
+\subsection*{Definizione 6.1.1}
+Un sistema si dice osservabile [determinabile] se esiste un intervallo di tempo $[0, \overline{t}]$ in cui, conoscendo perfettamente la risposta completa in uscita $y(t)$, l'ingresso $u(t)$ e le matrici $A, B, C, D$, risulta possibile ricavare univocamente lo stato all'inizio [alla fine] di tale intervallo.
+\subsection*{Definizione 6.1.2}
+Uno stato $\overline{x}$ del sistema si dice inosservabile se soddisfa la condizione
+\begin{equation}
+    \Psi(t)\overline{x} = 0 \quad , \quad \forall t \in T
+\end{equation}
+Infatti, posto 
+\begin{equation}
+    \Psi (t) = 
+    \begin{cases}
+        Ce^{At} \\
+        CA^t
+    \end{cases}   
+\end{equation}
+Se esistesse uno stato $\overline{x} \neq 0$ che soddisfi quella condizione, allora poichè $\Psi(t)x_0 = y_l(t)$ si avrebbe
+\begin{equation}
+    \Psi(t)(x_0 + \overline{x}) = y_l(t)
+\end{equation}
+Cioè in pratica lo stato $(x_0 + \overline{x})$ porterebbe il sistema alla stessa risposta completa dello stato $x_0$, cioè i due stati si dicono indistinguibili.\\
+Se nel sistema esiste anche un solo stato diverso da 0 che è inosservabile, allora l'intero sistema è inosservabile.
+\subsection*{Proprietà 6.1.2}
+L'insieme $X_i$ degli stati inosservabili del sistema è un sottospazio dello spazio di stato $R^n$
+\subsection*{Proprietà 6.1.3}
+Se uno stato $x$ è inosservabile, allora anche lo stato $\Phi(t)x$ è inosservabile, con
+\begin{equation}
+    \Phi(t) =
+    \begin{cases}
+        e^{At} \\
+        A^t
+    \end{cases}
+\end{equation}
+
+\newpage
+\subsection*{Teorema 6.2.1}
+    \subsubsection*{Premessa}
+    Nello studio dell'osservabilità si introduce la matrice $Q$ di osservabilità 
+    \begin{equation}
+        Q = 
+        \begin{bmatrix}
+            C \\
+            CA \\
+            CA^2 \\
+            ... \\
+            CA^{n-1}
+        \end{bmatrix}
+    \end{equation}
+    \subsubsection*{Enunciato}
+    Il sottospazio $X_i$ degli stati inosservabili del sistema coincide con il nucleo di $Q$
+    \begin{equation}
+        X_i = Ker(Q)
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    Se $x$ è inosservabile, allora per definizione soddisfa
+    \begin{equation}
+        \Psi(t)x = 0 \quad , \quad \forall t \in T \quad \Rightarrow \quad CA^ix = 0 \quad , \quad \forall i \in Z
+    \end{equation}
+    Quindi in particolare sarà vero per $i = 0, 1, ..., n-1$. Viceversa, se $x$ sta nel nucleo di $Q$, cioè
+    \begin{equation}
+        CA^ix = 0 \qquad i = 0, 1, ..., n-1
+    \end{equation}
+    Per il teorema di Caley-Hamilton si ha
+    \begin{equation}
+        A^n = -\sum_{i=0}^{n-1}a_iA^i
+    \end{equation}
+    Premoltiplicando per $C$ e postmoltiplicando per $x$ si ottiene
+    \begin{equation}
+        CA^nx = -\sum_{i=0}^{n-1}a_iCA^ix = 0
+    \end{equation}
+    Dove l'uguaglianza a 0 è dovuta all'ipotesi che $x \in Ker(Q)$, e quindi quel termine è effettivamente uguale a 0 per tutti gli $i$ compresi fra $0$ e $n-1$. Facendo lo stesso passaggio, ma premoltiplicando per $CA$ anzichè soltanto per $C$, si ottiene
+    \begin{equation}
+        CA^{n+1}x = 0
+    \end{equation}
+    Procedendo iterativamente, si ottiene la relazione per ogni valore di $i \in Z$.
+
+\newpage
+\subsection*{Teorema 6.2.2}
+    \subsubsection*{Enunciato}
+    Il sistema è osservabile se e solo se il rango di $Q$ è massimo, cioè pari alla dimensione dello spazio di stato $R^n$
+    \begin{equation}
+        rank(Q) = n
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    $\Rightarrow$. Il sistema è osservabile se non ci sono stati inosservabili, cioè se la dimensione di $X_i$ è nulla. Poichè, dato uno spazio di dimensione $m$ si ha per una matrice $E$
+    \begin{equation}
+        dim(Ker(E)) = m - rank(E)
+    \end{equation}
+    E siccome per il teorema 6.2.1 $X_i = Ker(Q)$, allora per far si che il sottospazio degli stati inosservabili abbia dimensione nulla, dev'essere necessariamente che
+    \begin{equation}
+        dim(Ker(Q)) = dim(X_i) = n - rank(Q) = 0 \quad \iff \quad rank(Q) = n
+    \end{equation}
+    $\Leftarrow$. Viceversa, se $rank(Q) = n$, occorre dimostrare che è possibile trovare uno stato $x_0$. In particolare si ha
+    \begin{equation}
+        y(t) = y_l(t) + y_f(t) \quad \Rightarrow \quad y_l(t) = y(t) - y_f(t)
+    \end{equation}
+    Poichè tutta la trattazione si basa sul presupposto che le misure si conoscano perfettamente, la $y_l(t)$ è calcolabile, in quanto note sia $y(t)$ che $y_f(t)$. Ma la risposta libera è anche uguale, per un certo $\overline{k}$, a 
+    \begin{equation}
+        y_l(t) = \Psi(t)x_0 \quad \Rightarrow \quad y_l(k) = CA^{k}x_0 \quad , \quad k = 0, 1, ..., \overline{k}
+    \end{equation}
+    Ponendo 
+    \begin{equation}
+        \Tilde{Q} = Q_{\overline{k}}(A, C) =
+        \begin{bmatrix}
+            C \\
+            CA \\
+            CA^2 \\
+            ... \\
+            CA^{\overline{k}}
+        \end{bmatrix}
+    \end{equation}
+    Si ottiene il sistema lineare 
+    \begin{equation}
+        \Tilde{Q}x_0 = y_l
+    \end{equation}
+    Che ha una sola e unica soluzione. Infatti non può averne più di una, perche $rank(Q) = n$, e non può averne nessuna perche le misure sono tutte esatte. Siccome però $\Tilde{Q}$ non è quadrata, occorre applicare la pseudo-inversa per trovare una soluzione a tale sistema. Si ha
+    \begin{equation}
+        Ker(\Tilde{Q}) = Ker(\Tilde{Q}'\Tilde{Q})
+    \end{equation}
+    Quindi premoltiplicando l'espressione del sistema per $\Tilde{Q}'$ si ottiene a sinistra una matrice quadrata, quindi invertibile, e invertendola si arriva alla soluzione del sistema
+    \begin{equation}
+        \Tilde{Q}'\Tilde{Q}x_0 = \Tilde{Q}'y_l \quad \Rightarrow \quad x_0 = (\Tilde{Q}'\Tilde{Q})^{-1}\Tilde{Q}'y_l
+    \end{equation}
+    Ottenendo così lo stato.
+
+\newpage
+\subsection*{Lemma 6.3.1}
+    \subsubsection*{Premessa}
+    Per lo studio della osservabilità a tempo continuo, si introduce la matrice gramiana di osservabilità
+    \begin{equation}
+        L(t) = \int_{0}^{t}e^{A'\tau}C'Ce^{A\tau}\,d\tau
+    \end{equation}
+    \subsubsection*{Enunciato}
+    Per ogni numero reale diverso da 0 vale la relazione
+    \begin{equation}
+        Ker(L(t)) = Ker(Q)
+    \end{equation}
+    \subsubsection*{Dimostrazione}
+    La dimostrazione è la stessa del lemma 5.5.4, il cui enunciato è
+    \begin{equation}
+        Im(G(t)) = Im(P)
+    \end{equation}
+    Infatti, come diretta conseguenza si aveva che
+    \begin{equation}
+        Ker(G(t)) = Ker(PP') = Ker(P')
+    \end{equation}
+    Effettuando allora le sostituzioni $A = A'$, $B = C'$ si ottiene
+    \begin{equation}
+        G(t) = \int_{0}^{t} e^{A\tau}BB'e^{A'\tau}\,d\tau \quad \Rightarrow \quad \int_{0}^{t} e^{A'\tau}C'Ce^{A\tau}\,d\tau = L(t)
+    \end{equation}
+    \begin{equation}
+        P' = 
+        \begin{bmatrix}
+            B \\
+            AB \\
+            A^2B \\
+            ... \\
+            A^{n-1}B
+        \end{bmatrix}
+        \quad \Rightarrow \quad
+        \begin{bmatrix}
+            C' \\
+            A'C' \\
+            A'^2C' \\
+            ... \\
+            A'^{n-1}C'
+        \end{bmatrix}
+        = 
+        \begin{bmatrix}
+            C & CA & CA^2 & ... & CA^{n-1}
+        \end{bmatrix}
+        = Q
+    \end{equation}
+\subsection*{Corollario 6.3.1}
+Come nel caso del lemma 5.5.4, anche qui una conseguenza importante è che uno stato $x$ appartiene al $Ker(L(t))$ se e solo se
+\begin{equation}
+    Ce^{A\theta}x = 0
+\end{equation}
+
+\newpage
+\subsection*{Teorema 6.3.1}
+Il sottospazio $X_i$ degli stati inosservabili coincide con il $Ker(L(t))$ o equivalentemente con il $Ker(L(t)$. 
+\begin{equation}
+    X_i = Ker(Q) = Ker(L(t))
+\end{equation}
+Infatti gli stati inosservabili sono gli stati che soddisfano la condizione $\Psi(t)x = 0$, dove a tempo a continuo si ha $\Psi(t) = Ce^{At}$. Ma questo equivale quindi a dire che uno stato è inosservabile se è vero che $Ce^{At}x = 0$, che è vale se e solo se vale la $CA^ix = 0$, cioè se $x \in Ker(Q)$ (poichè è un corollario del precedente lemma). Ma siccome per il lemma 6.3.1 $Ker(Q) = Ker(L(t))$, ecco dimostrata la tesi.
+
+\subsection*{Teorema 6.3.2}
+Il sistema è osservabile se e solo se vale una delle due condizioni
+\begin{equation}
+    rank(Q) = n
+\end{equation}
+\begin{equation}
+    rank(L(t)) = n
+\end{equation}
+Per quanto riguarda la necessità, basta notare che per l'equivalenza fra $Ker(Q)$ e $Ker(L(t))$ basta dimostrare che è vero per uno solo dei due. Se il sistema è osservabile allora non può avere altri stati inosservabili oltre allo stato nullo. Perciò il nucleo della matrice di osservabilità $Q$ dev'essere pari a $n$, per far si che la dimensione del sottospazio $X_i$ degli stati inosservabili sia nulla. Viceversa, se $Ker(L(t)) = n$ occorre dimostrare che esiste un intervallo di tempo per cui esiste $x_0$. Allora si considera al solito la risposta libera, di cui si conosce l'espressione poichè presupposto fondamentale della trattazione
+\begin{equation}
+    y_l(t) = Ce^{A\theta}x_0
+\end{equation}
+Premoltiplicando per $e^{A'\theta}C'$ si ottiene
+\begin{equation}
+    e^{A'\theta}C'y_l(t) = e^{A'\theta}C'Ce^{A\theta}x_0
+\end{equation}
+Se sono uguali queste espressioni, allora lo saranno anche i loro integrali
+\begin{equation}
+    \int_{0}^{t} e^{A'\theta}C'\,d\theta \, y_l(t) = \int_{0}^{t} e^{A'\theta}C'Ce^{A\theta}\,d\theta \, x_0 = L(t)x_0
+\end{equation}
+Dunque poichè $L(t)$ è quadrata e non singolare, si conclude
+\begin{equation}
+    L(t)^{-1} \int_{0}^{t} e^{A'\theta}C'y_l(t)\,d\theta = x_0
+\end{equation}
+Confermando così l'esistenza di una soluzione al sistema.
+
+\newpage
+\section{Determinabilità}
+\subsection*{Teorema 6.4.1}
+Il sistema a tempo discreto è determinabile se e solo se 
+\begin{equation}
+    Ker(Q) \subset Ker(A^n)
+\end{equation}
+Di questo risultato si mostrerà solo la necessità, ovvero che se vale $Ker(Q) \subset Ker(A^n)$ allora il sistema è determinabile. In questa condizione ci sono due possibilità, cioè il sistema può essere osservabile oppure non osservabile. Chiaramente, nel caso fosse osservabile, sarà anche determinabile. Dunque rimane da dimostrare il caso il cui non sia osservabile. Quando un sistema non è osservabile, esistono degli stati indistinguibili del tipo 
+\begin{equation}
+    x_0 = x_0 + \overline{x}
+\end{equation}
+Simulando una risposta completa si ottiene
+\begin{equation}
+    \begin{cases}
+        x(0) = x_0 \\
+        x(n) = A^nx_0 + x_f = A^n(x_0 + \overline{x}) + x_f = A^nx_0 + A^n\overline{x} + x_f = A^nx_0 + x_f
+    \end{cases}
+\end{equation}
+Dove la cancellazione del termine di $A^n\overline{x}$ dipende dal fatto che per ipotesi era stato detto che $Ker(Q) \subset Ker(A^n)$, ma $Ker(Q) = X_i$, cioè uguale al sottospazio degli stati inosservabili. Quindi qualunque stato inosservabile sarà tale che $A^n\overline{x} = 0$. Dunque poichè la soluzione è unica, il sistema è determinabile. 
+
+\subsection*{Proprietà 6.4.1}
+Il sistema a tempo continuo è determinabile se e solo se è osservabile.
+
+\newpage
+\section{Decomposizione di Kalman rispetto all'inosservabilità}
+
+\subsection*{Teorema 6.5.1 (di dualità)}
+Il sistema è osservabile, determinabile, raggiungibile, controllabile se e solo è il duale di esso è rispettivamente raggiungibile, controllabile, osservabile, determinabile. \\ \\
+Per quanto riguarda la dualità fra raggiungibilità e osservabilità, è facile notare che sussiste la relazione $P = Q'$. Infatti, ponendo $B = C'$ e $A = A'$ si ottiene
+\begin{equation}
+    \begin{bmatrix}
+        B & AB & ... & A^{n-1}B
+    \end{bmatrix}
+    = 
+    \begin{bmatrix}
+        C' & A'C' & ... & A'{n-1}C'
+    \end{bmatrix}
+    = 
+    \begin{bmatrix}
+        C' & (CA)' & ... & (CA^{n-1})'
+    \end{bmatrix}
+    = 
+    \begin{bmatrix}
+        C \\ 
+        CA \\
+        ... \\ 
+        CA^{n-1}
+    \end{bmatrix}
+\end{equation}
+Poichè i ranghi di una matrice trasposta coincidono, le condizioni di raggiungibilità e di osservabilità coincidono. Per quanto riguarda l'equivalenza fra controllabilità e determinabilità, a tempo continuo è gia dimostrata, poichè è in doppia implicazione con la raggiungibilità-osservabilità. Per quanto riguarda a tempo discreto è sufficiente notare che la condizione di controllabilità, con le stesse sostituzioni, equivale alla condizione di determinabilità
+\begin{equation}
+    rank
+    \begin{bmatrix}
+        P A^n
+    \end{bmatrix}
+    = rank
+    \begin{bmatrix}
+        Q \\
+        A^n
+    \end{bmatrix}
+\end{equation}
+
+\subsection*{Teorema 6.5.3}
+    \subsubsection*{Enunciato}
+    Se il sistema non è osservabile, esiste un cambiamento di base tale che le matrici $\hat{A}, \hat{B}, \hat{C}$ abbiano la seguente struttura
+    \begin{equation}
+        \hat{A} = 
+        \begin{bmatrix}
+            A_{ii} & A_{io} \\
+            0 & A_{oo}
+        \end{bmatrix}
+        \qquad
+        \hat{B} = 
+        \begin{bmatrix}
+            B_i \\
+            B_o
+        \end{bmatrix}
+        \qquad
+        \hat{C} = 
+        \begin{bmatrix}
+            0 & C_o
+        \end{bmatrix}
+    \end{equation}
+    E il sistema relativo alle matrici $A_{oo}, B_o, C_o$ è osservabile.
+    \subsubsection*{Dimostrazione}
+    La dimostrazione è del tutto equivalente a quella fatta per la decomposizione rispetto alla raggiungibilità, con alcune accortezze da cambiare. Infatti, la matrice $T^{-1}$ verrà scelta allo stesso modo, ma con i primi $n_i$ vettori che formano una base per $X_i$. Inoltre, la matrice di osservabilità nella nuova base viene
+    \begin{equation}
+        \begin{bmatrix}
+            \hat{C} \\
+            \hat{C}\hat{A} \\
+            \hat{C}\hat{A}^2 \\
+            ... \\
+            \hat{C}\hat{A}^{n-1} \\
+        \end{bmatrix}
+        = 
+        \begin{bmatrix}
+            0 & C_o \\
+            0 & C_oA_{oo} \\
+            0 & C_oA_{oo}^2 \\
+            ... \\
+            0 & C_oA_{oo}^{n-1} \\
+        \end{bmatrix}
+    \end{equation}
+    Il cui rango è pari a $n - n_i$. Infine, vale la pena notare che il sistema può essere scomposto in due sotto-sistemi uno osservabile e l'altro non osservabile.
+
+\subsection*{Teorema 6.5.4}
+Se il sistema non è osservabile, la sua matrice di trasferimento ingresso-uscita soddisfa la relazione
+\begin{equation}
+    W(s) = C_o(sI - A_{oo})^{-1}B_o + D
+\end{equation}
+Quindi in pratica la matrice di trasferimento non dipende in alcun modo dal sottosistema inosservabile. Infatti
+\begin{equation}
+    W(s) = 
+    \begin{bmatrix}
+        0 & C_0
+    \end{bmatrix}
+    \begin{bmatrix}
+        * & * \\
+        0 & (sI - A_{oo})^{-1}
+    \end{bmatrix}
+    \begin{bmatrix}
+        B_i \\
+        B_o
+    \end{bmatrix}
+    + D = C_o(sI - A_{oo})^{-1}B_o + D
+\end{equation}
+
+\newpage
+\section*{Osservatore dello stato}
+Un osservatore è sistema dinamico lineare e stazionario che si accosta ad un eventuale altro sistema $S$ di cui non si conosce lo stato. Dando in ingresso all'osservatore l'ingresso e l'uscita del sistema $S$, e assumendo di conoscere perfettamente per $S$ sia ingresso e uscita, sia le matrici $A, B, C, D$, si chiede per l'osservatore che il suo stato $\xi(t)$ sia quanto più possibile uguale allo stato $x(t)$ del sistema $S$. Si definisce quindi un'equazione per lo stato dell'osservatore
+\begin{equation}
+    \Delta \xi (t) = H\xi(t) + Ru(t) + Vy(t)
+\end{equation}
+E l'errore di stima
+\begin{equation}
+    e(t) = x(t) - \xi(t)
+\end{equation}
+Per tale errore, si vogliono raggiungere due principali obiettivi
+\[ 
+    \lim_{t \to \infty} e(t) = 0 
+\]
+\begin{equation}
+    e(0) = 0 \Rightarrow e(t) = 0 \qquad \forall t > 0
+\end{equation}
+Supponendo che $e(t)$ soddisfi tali condizioni, si cerca allora un espressione per $e(t)$
+\begin{equation}
+    \begin{split}
+        \Delta e(t) = \Delta x(t) - \Delta \xi(t) = Ax(t) + Bu(t) - H\xi(t) - Ru(t) - Vy(t) = \\
+        = Ax(t) + Bu(t) - H(x(t) - e(t)) - Ru(t) - V(Cx(t) + Du(t)) = \\
+        = He(t) + (A - H - VC)x(t) + (B - R - VD)u(t)
+    \end{split}
+\end{equation}
+A questo punto si cerca un'espressione per le matrici $H, R, V$.
+\subsubsection*{H}
+Ponendo $u(t) = 0$ si ottiene
+\begin{equation}
+    \Delta e(t) = He(t) + (A - H - VC)x(t)
+\end{equation}
+Notando la somiglianza con 
+\begin{equation}
+    \Delta x(t) = Ax(t) + Bu(t)
+\end{equation}
+Si evince che in tale equazione $x(t)$ svolge una funzione di ingresso forzante per la dinamica dell'errore. Passando alla trasformata di Laplace
+\begin{equation}
+    (\lambda I - H)^{-1}(A - H - VC)(\lambda I - A)^{-1}x_0 = 0
+\end{equation}
+Che per l'arbitrarietà di $x_0$ implica 
+\begin{equation}
+    (\lambda I - H)^{-1}(A - H - VC)(\lambda I - A)^{-1} = 0
+\end{equation}
+e dunque premoltiplicando per $(\lambda I - H)$ e postmoltiplicando per $(\lambda I - A)$, si ricava
+\begin{equation}
+    H = A - VC
+\end{equation}
+\subsubsection*{R}
+Sotto tali condizioni, ponendo $u(t) = \overline{u}$, cioè un ingresso costante, si ottiene quindi
+\begin{equation}
+    \Delta e(t) = He(t) + (B - R - VD)\overline{u}
+\end{equation}
+Che passando alla trasformata di Laplace diventa
+\begin{equation}
+    (\lambda I - H)^{-1}(B - R - VD) \{ 1/s, \frac{z}{z-1} \} \overline{u} = 0
+\end{equation}
+Che, al solito, grazie all'arbitrarietà di $\overline{u}$ diventa
+\begin{equation}
+    (\lambda I - H)^{-1}(B - R - VD) = 0
+\end{equation}
+E premoltiplicando per $(\lambda I - H)$ si ricava
+\begin{equation}
+    R = B - VD
+\end{equation}
+\\ \\
+Perciò si conclude che la dinamica dell'errore diventa
+\begin{equation}
+    \Delta e(t) = (A - VC)e(t)
+\end{equation}
+E per lo stato $\xi(t)$ si ha
+\begin{equation}
+    \Delta \xi(t) = (A - VC)\xi(t) + (B - VD)u(t) + Vy(t)
+\end{equation}
+Dalla quale si ricava il seguente risultato
+\subsection*{Teorema 6.6.1}
+Il sistema $\Delta \xi (t) = H\xi(t) + Ru(t) + Vy(t)$ è un osservatore dello stato, ovvero soddisfa le condizioni 
+\[ 
+    \lim_{t \to \infty} e(t) = 0 
+\]
+\begin{equation}
+    e(0) = 0 \Rightarrow e(t) = 0 \qquad \forall t > 0
+\end{equation}
+se e solo se per le matrici $H, R, V$ valgono le relazioni
+\begin{equation}
+    \begin{matrix}
+        H = A - VC \\
+        R = B - VD
+    \end{matrix}
+\end{equation}
+e inoltre gli autovalori della matrice $H$ sono tutti autovalori buoni.
+
+\subsection*{Teorema 6.6.2}
+    \subsubsection*{Premessa}
+    Un sistema si dice rilevabile se esiste una matrice $V$ tale che tutti gli autovalori della matrice $A - VC$ siano buoni, o equivalentemente, se per esso esiste un osservatore. Da questa definizione, si ricava il seguente teorema di dualità.
+    \subsubsection*{Enunciato}
+    Un sistema è rilevabile se vale una qualunque delle seguenti condizioni:
+    \begin{itemize}
+        \item il suo sistema duale è stabilizzabile
+        \item vale la relazione $rank \begin{bmatrix}A - \lambda I \\ C\end{bmatrix} = n$
+        \item la matrice dinamica $A_{ii}$ del sottosistema inosservabile ha tutti autovalori buoni
+    \end{itemize}
+
+\newpage
+\section{Stabilizzazione mediante retroazione dall'uscita}
+
+\newpage
+\section{Realizzazione}
+Come visto nei paragrafi precedenti, le decomposizioni di Kalman rispetto alla raggiungibilità e all'osservabilità mettono in luce il fatto che una funzione di trasferimento ingresso-uscita $W(\lambda)$ contiene al suo interno soltanto le informazioni del sottosistema osservabile e raggiungibile, scartando tutto il resto. Ci si pone quindi il problema di come poter ricavare le matrici $A, B, C, D$ di un sistema a partire dalla $W(\lambda)$. Tale problema si chiama realizzazione. \\ \\
+\subsection*{Definizione 7.3.1}
+Una matrice di trasferimento $W(\lambda)$ si dice realizzabile se esiste un intero $n > 0$ tale per cui 
+\begin{equation}
+    W(\lambda) = C(sI - A)^{-1}B + D
+\end{equation}
+e in tal caso si dice realizzazione di ordine $n$.
+
+\subsection*{Teorema 7.3.1}
+Una matrice di trasferimento $W(\lambda)$ è realizzabile se e solo se è razionale propria e a coefficienti reali. \\ \\
+
+A tal proposito si definisce $q_W(\lambda)$ il polinomio minimo di $W(\lambda)$ dato dal minimo comune multiplo dei denominatori monici di $W(\lambda)$
+\begin{equation}
+    q_W(\lambda) = \lambda^m + \sum_{i=0}^{m-1}\beta_i\lambda^i
+\end{equation}
+Se la $W(\lambda)$ è razionale propria, allora esiste sempre e finito il limite 
+\begin{equation}
+    \lim_{\lambda \to \infty} W(\lambda) = W_0
+\end{equation}
+Quindi posta $\Tilde{W}(\lambda) = W(\lambda) - W_0$ si ottiene $W(\lambda) = W_0 + \Tilde{W}(\lambda)$, che è strettamente propria.  
+
+\end{document}
